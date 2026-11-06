@@ -1,1 +1,26 @@
 node_modules/
+server/node_modules/
+client/node_modules/
+
+# Environment variables (jangan commit ke git)
+.env
+.env.local
+.env.*.local
+server/.env
+client/.env
+client/.env.local
+
+# Data runtime
+server/uploads/*
+!server/uploads/.gitkeep
+server/src/db/data.json
+server/src/db/*.bak
+server/src/db/*.tmp
+
+# Build output
+client/dist/
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+*.log

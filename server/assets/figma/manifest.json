@@ -1,0 +1,36 @@
+{
+  "fileId": "ojrU8nLT4NjhAvPDf7uNKT",
+  "exportedAt": "2026-11-05T03:56:33.583Z",
+  "images": {
+    "samsung-galaxy-s24-ultra": {
+      "nodeId": "4:3279",
+      "fileName": "samsung-galaxy-s24-ultra.png",
+      "localPath": "assets/figma/samsung-galaxy-s24-ultra.png"
+    },
+    "apple-iphone-15": {
+      "nodeId": "4:3312",
+      "fileName": "apple-iphone-15.png",
+      "localPath": "assets/figma/apple-iphone-15.png"
+    },
+    "redmi-note-13-pro-5g": {
+      "nodeId": "4:3345",
+      "fileName": "redmi-note-13-pro-5g.png",
+      "localPath": "assets/figma/redmi-note-13-pro-5g.png"
+    },
+    "vivo-30": {
+      "nodeId": "4:3378",
+      "fileName": "vivo-30.png",
+      "localPath": "assets/figma/vivo-30.png"
+    },
+    "hero-galaxy-s24": {
+      "nodeId": "4:3209",
+      "fileName": "hero-galaxy-s24.png",
+      "localPath": "assets/figma/hero-galaxy-s24.png"
+    },
+    "promo-redmi": {
+      "nodeId": "4:3424",
+      "fileName": "promo-redmi.png",
+      "localPath": "assets/figma/promo-redmi.png"
+    }
+  }
+}

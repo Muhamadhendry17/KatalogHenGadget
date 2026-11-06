@@ -1,0 +1,305 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-dark-950 text-white antialiased;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl;
+  }
+
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-xl hover:border-white/20 transition-all duration-300 hover:shadow-[0_0_30px_rgba(14,165,233,0.2)];
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(to right, #22d3ee, #06b6d4);
+  }
+
+  .btn-primary {
+    @apply text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98];
+    background-color: #0ea5e9;
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+  }
+  .btn-primary:hover {
+    background-color: #06b6d4;
+    box-shadow: 0 0 30px rgba(14, 165, 233, 0.5);
+  }
+
+  .btn-outline {
+    @apply border border-white/20 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 hover:bg-white/5 hover:scale-[1.02] active:scale-[0.98];
+  }
+  .btn-outline:hover {
+    border-color: #22d3ee;
+  }
+
+  .input-field {
+    @apply w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/40 focus:outline-none transition-all duration-300;
+  }
+  .input-field:focus {
+    border-color: #06b6d4;
+    box-shadow: 0 0 0 1px #06b6d4;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes flipIn {
+  0% {
+    opacity: 0;
+    transform: perspective(1400px) rotateY(-88deg) scale(0.94);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1400px) rotateY(0deg) scale(1);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.animate-flip-in {
+  animation: flipIn 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-slide-out-right {
+  animation: slideOutRight 0.22s ease-in both;
+}
+
+/* ---------- Home hero ambience ---------- */
+
+@keyframes auroraDriftA {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(38px, -26px, 0) scale(1.08);
+  }
+}
+
+@keyframes auroraDriftB {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.05);
+  }
+  50% {
+    transform: translate3d(-42px, 24px, 0) scale(0.94);
+  }
+}
+
+@keyframes slowSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shineSweep {
+  0% {
+    transform: translateX(-160%) skewX(-18deg);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.7;
+  }
+  48% {
+    opacity: 0.25;
+  }
+  70%,
+  100% {
+    transform: translateX(260%) skewX(-18deg);
+    opacity: 0;
+  }
+}
+
+@keyframes floatChip {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+@keyframes pulseHalo {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.07);
+  }
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes productIn {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.hero-aurora-a {
+  animation: auroraDriftA 16s ease-in-out infinite;
+}
+
+.hero-aurora-b {
+  animation: auroraDriftB 20s ease-in-out infinite;
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 52% 30%, #000 20%, transparent 78%);
+  mask-image: radial-gradient(ellipse 75% 65% at 52% 30%, #000 20%, transparent 78%);
+}
+
+.hero-halo {
+  animation: pulseHalo 7s ease-in-out infinite;
+}
+
+.animate-slow-spin {
+  animation: slowSpin 22s linear infinite;
+}
+
+.hero-tilt {
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.hero-shine::after {
+  content: '';
+  position: absolute;
+  top: -40%;
+  bottom: -40%;
+  left: 0;
+  width: 34%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    rgba(255, 255, 255, 0.15),
+    transparent
+  );
+  animation: shineSweep 6.5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.animate-float-chip {
+  animation: floatChip 5.5s ease-in-out infinite;
+}
+
+.animate-float-chip-delayed {
+  animation: floatChip 6.5s ease-in-out infinite;
+  animation-delay: 1.2s;
+}
+
+.animate-dropdown-in {
+  animation: dropdownIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: top center;
+}
+
+.animate-product-in {
+  animation: productIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.gradient-text {
+  background-image: linear-gradient(100deg, #22d3ee, #38bdf8, #818cf8, #22d3ee);
+  background-size: 220% auto;
+  animation: gradientShift 7s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-aurora-a,
+  .hero-aurora-b,
+  .hero-halo,
+  .animate-slow-spin,
+  .animate-float-chip,
+  .animate-float-chip-delayed,
+  .animate-dropdown-in,
+  .animate-product-in,
+  .gradient-text {
+    animation: none;
+  }
+  .hero-shine::after {
+    animation: none;
+    opacity: 0;
+  }
+  .hero-tilt {
+    transition: none;
+  }
+}
