@@ -25,7 +25,7 @@ bekerja, perbandingan produk, keranjang, dan checkout melalui WhatsApp.
 - **Wishlist** — tombol hati di kartu produk hanya menyimpan/menghapus produk tanpa
   membuka halaman detail; status tersimpan di `localStorage`.
 - **Keranjang & Checkout** — panel checkout geser dari kanan, menampilkan gambar,
-  harga, jumlah, dan total; checkout membuka WhatsApp `6287777747462`.
+  harga, jumlah, dan total; checkout membuka WhatsApp `628xxxxxxx`.
 - **Artikel** — daftar dan halaman detail artikel.
 - **Halaman informasi** — panduan membeli, FAQ, cerita kami, cara memilih, kontak,
   kebijakan privasi.
@@ -98,7 +98,7 @@ layanan gambar eksternal.
 
 - Harga di katalog adalah harga contoh. Harga final, stok, dan ongkir dikonfirmasi
   melalui WhatsApp.
-- Nomor WhatsApp checkout: **+62 877-7774-7462** (`6287777747462`).
+- Nomor WhatsApp checkout: **+62 xxxxxxx** (`628xxxxx`).
 - Akun admin dikelola di `server/src/db/data.json`; halaman register publik hanya
   membuat akun customer. Kredensial admin tidak ditampilkan di UI. Gunakan
   password yang kuat dan jangan commit kredensial ke repository publik.
