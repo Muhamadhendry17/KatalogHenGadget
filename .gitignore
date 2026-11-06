@@ -13,7 +13,6 @@ client/.env.local
 # Data runtime
 server/uploads/*
 !server/uploads/.gitkeep
-server/src/db/data.json
 server/src/db/*.bak
 server/src/db/*.tmp
 
