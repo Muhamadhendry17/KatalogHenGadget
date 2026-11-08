@@ -1,40 +1,40 @@
-import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { useFavorites } from '../contexts/FavoritesContext';
 import { useFormatCurrency } from '../contexts/CurrencyContext';
-
-const WISHLIST_KEY = 'hengadget_wishlist';
-
-function readWishlist() {
-  try {
-    return JSON.parse(localStorage.getItem(WISHLIST_KEY) || '[]');
-  } catch {
-    return [];
-  }
-}
+import { assetUrl } from '../lib/api';
 
 export default function ProductCard({ product, compact = false }) {
   const { addItem } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const formatCurrency = useFormatCurrency();
   const navigate = useNavigate();
-  const [saved, setSaved] = useState(() => readWishlist().includes(product.id));
+  const saved = isFavorite(product.id);
+
+  // Default varian jika belum dipilih (dari halaman detail)
+  const variants = product.variants || [{ storage: '', price: product.price, stock: product.stock, color: product.colors?.[0], colorName: product.colorNames?.[0] || 'Default' }];
+  const selectedVariant = 0;
+  const activeVariant = variants[selectedVariant] || variants[0];
+  const activeColorName = product.colorNames?.[selectedVariant] || activeVariant.colorName || 'Warna pilihan';
 
   const toggleWishlist = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    const current = readWishlist();
-    const next = current.includes(product.id)
-      ? current.filter((id) => id !== product.id)
-      : [...current, product.id];
-    localStorage.setItem(WISHLIST_KEY, JSON.stringify(next));
-    setSaved(next.includes(product.id));
+    toggleFavorite(product.id);
   };
 
   const handleAddToCart = (event) => {
     event.preventDefault();
     event.stopPropagation();
     if (product.stockStatus === 'Habis') return;
-    addItem(product);
+    if (!product.variants || product.variants.length === 0) {
+      addItem(product);
+    } else {
+      // Cek stok varian aktif
+      const activeVariant = variants[selectedVariant] || variants[0];
+      if (activeVariant.stock != null && activeVariant.stock <= 0) return;
+      addItem({ ...product, price: activeVariant.price, varian: `${activeVariant.storage || ''} ${activeColorName || ''}`.trim() });
+    }
     navigate('/cart');
   };
 
@@ -56,7 +56,7 @@ export default function ProductCard({ product, compact = false }) {
     >
       <div className="relative h-60 overflow-hidden bg-gradient-to-br from-[#eef1f3] via-[#dfe3e6] to-[#c4c9ce]">
         <img
-          src={product.image}
+          src={assetUrl(product.image)}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           onError={(event) => {
@@ -100,6 +100,27 @@ export default function ProductCard({ product, compact = false }) {
             Stok habis
           </span>
         )}
+
+        {product.badges?.length && (
+          <div className="absolute bottom-3 right-3 flex flex-col gap-1.5">
+            {product.badges.map((badge, idx) => {
+              const variant =
+                badge === 'Promo'
+                  ? 'bg-emerald-500/90 text-emerald-900'
+                  : badge === 'Best Seller'
+                    ? 'bg-amber-500/90 text-[#04111c]'
+                    : 'bg-cyan-500/90 text-[#04111c]';
+              return (
+                <span
+                  key={idx}
+                  className={`rounded-md px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white ${variant}`}
+                >
+                  {badge}
+                </span>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <div className="p-5">
@@ -107,10 +128,8 @@ export default function ProductCard({ product, compact = false }) {
           <span className="text-cyan-300 text-[10px] font-bold uppercase tracking-[0.16em]">
             {product.brand}
           </span>
-          <span className="text-white/50 text-[11px] flex items-center gap-1">
-            <span className="text-amber-400">★</span>
-            {product.rating.toFixed(1)}
-            <span className="text-white/30">({product.reviews})</span>
+          <span className="text-white/35 text-[11px] uppercase tracking-wider">
+            {product.stockStatus === 'Habis' ? 'Stok habis' : 'Tersedia'}
           </span>
         </div>
 
@@ -142,11 +161,18 @@ export default function ProductCard({ product, compact = false }) {
         <div className="mt-4 flex items-end justify-between gap-3">
           <div>
             <span className="block text-white/35 text-[10px] uppercase tracking-wider">
-              Harga contoh
+              Harga
             </span>
-            <span className="text-xl font-extrabold text-white">
-              {formatCurrency(product.price)}
-            </span>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-xl font-extrabold text-white">
+                {formatCurrency(product.price)}
+              </span>
+              {product.originalPrice && product.originalPrice > product.price && (
+                <span className="text-[11px] text-white/40 line-through">
+                  {formatCurrency(product.originalPrice)}
+                </span>
+              )}
+            </div>
           </div>
 
           <button

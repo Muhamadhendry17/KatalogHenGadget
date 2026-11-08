@@ -1,6 +1,7 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useFormatCurrency } from '../contexts/CurrencyContext';
+import { assetUrl } from '../lib/api';
 
 export default function ProductSelect({
   products,
@@ -178,7 +179,7 @@ export default function ProductSelect({
       >
         <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-[#eef1f3] to-[#c4c9ce]">
           <img
-            src={selected.image}
+            src={assetUrl(selected.image)}
             alt=""
             className="h-full w-full object-cover"
             onError={(event) => {
@@ -263,7 +264,7 @@ export default function ProductSelect({
                 >
                   <span className="h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-[#eef1f3] to-[#c4c9ce]">
                     <img
-                      src={product.image}
+                      src={assetUrl(product.image)}
                       alt=""
                       className="h-full w-full object-cover"
                       loading="lazy"

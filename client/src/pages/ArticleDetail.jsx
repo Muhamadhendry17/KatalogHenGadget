@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import { articles, getArticleById } from '../data/products';
 import { useCatalog } from '../contexts/CatalogContext';
 import { normalizeWhatsAppNumber } from '../lib/phone';
+import { assetUrl } from '../lib/api';
 
 export default function ArticleDetail() {
   const { id } = useParams();
@@ -58,7 +59,7 @@ export default function ArticleDetail() {
           <p className="text-white/55 mt-3 text-lg">{article.excerpt}</p>
 
           <div className="mt-8 rounded-3xl overflow-hidden border border-white/10">
-            <img src={article.image} alt={article.title} className="w-full h-64 md:h-80 object-cover" />
+            <img src={assetUrl(article.image)} alt={article.title} className="w-full h-64 md:h-80 object-cover" />
           </div>
 
           <div className="mt-8 space-y-5">

@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useCatalog } from '../../contexts/CatalogContext';
-import { apiRequest } from '../../lib/api';
+import ConfirmDialog from '../../components/ConfirmDialog';
+import { apiRequest, assetUrl } from '../../lib/api';
 import { useFormatCurrency } from '../../contexts/CurrencyContext';
 
 const currentYear = new Date().getFullYear();
@@ -12,14 +13,16 @@ const emptyForm = {
   tag: 'PILIHAN HENGADGET',
   featured: false,
   price: '',
+  originalPrice: '',
+  stock: 10,
   stockStatus: 'Tersedia',
+  badges: '',
+  variants: '',
   categoryId: '',
   description: '',
   imageurl: '',
-  reviews: 0,
   releaseYear: currentYear,
   isNew: true,
-  rating: 4.5,
   performanceScore: 80,
   cameraScore: 80,
   colors: '#cbd5e1, #94a3b8',
@@ -52,20 +55,38 @@ const parseSpecs = (value) =>
     })
     .filter(Boolean);
 
+const parseVariants = (value) =>
+  String(value || '')
+    .split(/\r?\n/)
+    .map((line) => {
+      const parts = line.split('|');
+      if (parts.length < 3) return null;
+      return {
+        storage: parts[0].trim() || null,
+        price: Number(parts[1].trim()) || 0,
+        stock: Number(parts[2].trim()) || 10,
+        color: parts[3]?.trim() || '#cbd5e1',
+        colorName: parts[4]?.trim() || 'Default',
+      };
+    })
+    .filter(Boolean);
+
 const toForm = (product) => ({
   name: product.name || '',
   brand: product.brand || '',
   tag: product.tag || '',
   featured: Boolean(product.featured),
   price: product.price ?? '',
+  originalPrice: product.originalPrice ?? '',
+  stock: product.stock ?? 10,
   stockStatus: product.stockStatus || 'Tersedia',
+  badges: (product.badges || []).join(', '),
+  variants: (product.variants || []).map((v) => `${v.storage || ''}|${v.price || ''}|${v.stock || ''}|${v.color || ''}|${v.colorName || ''}`).join('\n'),
   categoryId: product.categoryId || '',
   description: product.description || '',
   imageurl: product.image || '',
-  reviews: product.reviews ?? 0,
   releaseYear: product.releaseYear ?? currentYear,
   isNew: Boolean(product.isNew),
-  rating: product.rating ?? 4.5,
   performanceScore: product.performanceScore ?? 80,
   cameraScore: product.cameraScore ?? 80,
   colors: (product.colors || []).join(', '),
@@ -115,6 +136,7 @@ export default function AdminProducts() {
   const [preview, setPreview] = useState('');
   const [saving, setSaving] = useState(false);
   const [busyId, setBusyId] = useState('');
+  const [deleteTarget, setDeleteTarget] = useState(null);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
 
@@ -187,13 +209,15 @@ export default function AdminProducts() {
       payload.append('tag', form.tag);
       payload.append('featured', String(form.featured));
       payload.append('price', form.price);
+      payload.append('originalPrice', form.originalPrice);
+      payload.append('stock', String(form.stock));
       payload.append('stockStatus', form.stockStatus);
+      payload.append('badges', JSON.stringify(splitList(form.badges)));
+      payload.append('variants', JSON.stringify(parseVariants(form.variants)));
       payload.append('categoryId', form.categoryId);
       payload.append('description', form.description);
-      payload.append('reviews', String(form.reviews));
       payload.append('releaseYear', String(form.releaseYear));
       payload.append('isNew', String(form.isNew));
-      payload.append('rating', String(form.rating));
       payload.append('performanceScore', String(form.performanceScore));
       payload.append('cameraScore', String(form.cameraScore));
       payload.append('colors', JSON.stringify(splitList(form.colors)));
@@ -237,10 +261,9 @@ export default function AdminProducts() {
     }
   };
 
-  const handleDelete = async (product) => {
-    if (!window.confirm(`Hapus "${product.name}" dari katalog? Tindakan ini tidak bisa dibatalkan.`)) {
-      return;
-    }
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    const product = deleteTarget;
     setBusyId(product.id);
     setError('');
     setNotice('');
@@ -252,6 +275,7 @@ export default function AdminProducts() {
       setError(requestError.message);
     } finally {
       setBusyId('');
+      setDeleteTarget(null);
     }
   };
 
@@ -327,8 +351,9 @@ export default function AdminProducts() {
                 <th className="px-5 py-4 font-semibold">Produk</th>
                 <th className="px-4 py-4 font-semibold">Kategori</th>
                 <th className="px-4 py-4 font-semibold">Harga</th>
-                <th className="px-4 py-4 font-semibold">Rating</th>
                 <th className="px-4 py-4 font-semibold">Stok</th>
+                <th className="px-4 py-4 font-semibold">Badge</th>
+                <th className="px-4 py-4 font-semibold">Status</th>
                 <th className="px-5 py-4 text-right font-semibold">Aksi</th>
               </tr>
             </thead>
@@ -338,7 +363,7 @@ export default function AdminProducts() {
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
                       <span className="h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-[#eef1f3] to-[#c4c9ce]">
-                        <img src={product.image} alt="" className="h-full w-full object-cover" />
+                        <img src={assetUrl(product.image)} alt="" className="h-full w-full object-cover" />
                       </span>
                       <div className="min-w-0">
                         <p className="max-w-[260px] truncate font-semibold text-white">{product.name}</p>
@@ -351,26 +376,54 @@ export default function AdminProducts() {
                   </td>
                   <td className="px-4 py-4 text-white/55">{product.categoryName || '—'}</td>
                   <td className="px-4 py-4 font-medium text-white/80">{formatCurrency(product.price)}</td>
-                  <td className="px-4 py-4 text-white/55">
-                    <span className="text-amber-400">★</span> {Number(product.rating || 0).toFixed(1)}
-                  </td>
                   <td className="px-4 py-4">
-                    <button
-                      type="button"
-                      onClick={() => handleToggleStock(product)}
-                      disabled={busyId === product.id}
-                      className={`rounded-full px-3 py-1 text-[10px] font-bold transition-colors disabled:opacity-50 ${
-                        product.stockStatus === 'Habis'
-                          ? 'bg-red-500/15 text-red-300 hover:bg-red-500/25'
-                          : 'bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25'
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-[10px] font-bold transition-colors ${
+                        product.stock === 0 || product.stockStatus === 'Habis'
+                          ? 'bg-red-500/15 text-red-300'
+                          : product.stock <= 5
+                            ? 'bg-amber-500/15 text-amber-300'
+                            : 'bg-emerald-500/15 text-emerald-300'
                       }`}
-                      title="Klik untuk mengubah status stok"
                     >
-                      {product.stockStatus}
-                    </button>
+                      {product.stockStatus} ({product.stock})
+                    </span>
+                  </td>
+                  <td className="px-4 py-4 text-white/55">
+                    {product.badges?.length ? (
+                      product.badges.map((b, i) => (
+                        <span key={i} className="mr-1.5 inline-block px-1.5 py-0.5 rounded text-[10px] font-bold bg-white/10 text-white/70">
+                          {b}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-white/30">—</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-4 text-white/55">
+                    {product.featured ? (
+                      <span className="rounded bg-cyan-400/15 px-1.5 py-0.5 text-[10px] font-bold text-cyan-300">
+                        Unggulan
+                      </span>
+                    ) : (
+                      <span className="text-white/30">—</span>
+                    )}
                   </td>
                   <td className="px-5 py-4">
                     <div className="flex items-center justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleStock(product)}
+                        disabled={busyId === product.id}
+                        className={`rounded-full px-3 py-1 text-[10px] font-bold transition-colors disabled:opacity-50 ${
+                          product.stockStatus === 'Habis'
+                            ? 'bg-red-500/15 text-red-300 hover:bg-red-500/25'
+                            : 'bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25'
+                        }`}
+                        title="Klik untuk mengubah status stok"
+                      >
+                        {product.stockStatus}
+                      </button>
                       <button
                         type="button"
                         onClick={() => openEdit(product)}
@@ -380,7 +433,7 @@ export default function AdminProducts() {
                       </button>
                       <button
                         type="button"
-                        onClick={() => handleDelete(product)}
+                        onClick={() => setDeleteTarget(product)}
                         disabled={busyId === product.id}
                         className="rounded-lg border border-red-400/20 px-3 py-1.5 text-xs font-semibold text-red-300/80 transition-colors hover:bg-red-500/10 hover:text-red-300 disabled:opacity-50"
                       >
@@ -392,7 +445,7 @@ export default function AdminProducts() {
               ))}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-5 py-16 text-center">
+                  <td colSpan={7} className="px-5 py-16 text-center">
                     <p className="text-sm text-white/50">Tidak ada produk yang cocok.</p>
                     <button
                       type="button"
@@ -500,6 +553,64 @@ export default function AdminProducts() {
               </label>
 
               <label>
+                <span className="mb-1.5 block text-xs font-semibold text-white/60">Harga Asli / Coret (Rp)</span>
+                <input
+                  type="number"
+                  min="0"
+                  step="1000"
+                  value={form.originalPrice}
+                  onChange={(event) => updateField('originalPrice', event.target.value)}
+                  className="input-field"
+                  placeholder="Kosongkan jika tidak ada diskon"
+                />
+                <p className="mt-0.5 text-[10px] text-white/40">
+                  Diisi jika ada promo. Akan ditampilkan dengan garis coret di halaman produk.
+                </p>
+              </label>
+
+              <label>
+                <span className="mb-1.5 block text-xs font-semibold text-white/60">Stok (integer)</span>
+                <input
+                  type="number"
+                  min="0"
+                  value={form.stock}
+                  onChange={(event) => updateField('stock', event.target.value)}
+                  className="input-field"
+                  placeholder="10"
+                />
+                <p className="mt-0.5 text-[10px] text-white/40">
+                  10 = tersedia, 0 = habis. Digunakan untuk toggle stok konsisten.
+                </p>
+              </label>
+
+              <label>
+                <span className="mb-1.5 block text-xs font-semibold text-white/60">Badge (pisahkan koma)</span>
+                <input
+                  value={form.badges}
+                  onChange={(event) => updateField('badges', event.target.value)}
+                  className="input-field"
+                  placeholder="Promo, Best Seller, Baru"
+                />
+                <p className="mt-0.5 text-[10px] text-white/40">
+                  Contoh: Promo, Best Seller, Baru. Tampilkan badge pada kartu produk.
+                </p>
+              </label>
+
+              <label>
+                <span className="mb-1.5 block text-xs font-semibold text-white/60">Varian (satu per baris, format: penyimpanan|harga|stok|warna|nama_warna)</span>
+                <textarea
+                  rows={4}
+                  value={form.variants}
+                  onChange={(event) => updateField('variants', event.target.value)}
+                  className="input-field resize-y font-mono text-xs"
+                />
+                <p className="mt-0.5 text-[10px] text-white/40">
+                  Contoh: 256 GB|19999000|10|#d4d4d8|Titanium Gray<br />
+                  Varian memengaruhi harga yang ditampilkan pada halaman produk.
+                </p>
+              </label>
+
+              <label>
                 <span className="mb-1.5 block text-xs font-semibold text-white/60">Status stok</span>
                 <select
                   value={form.stockStatus}
@@ -565,28 +676,6 @@ export default function AdminProducts() {
                   max="100"
                   value={form.cameraScore}
                   onChange={(event) => updateField('cameraScore', event.target.value)}
-                  className="input-field"
-                />
-              </label>
-              <label>
-                <span className="mb-1.5 block text-xs font-semibold text-white/60">Rating (0–5)</span>
-                <input
-                  type="number"
-                  min="0"
-                  max="5"
-                  step="0.1"
-                  value={form.rating ?? 0}
-                  onChange={(event) => updateField('rating', event.target.value)}
-                  className="input-field"
-                />
-              </label>
-              <label>
-                <span className="mb-1.5 block text-xs font-semibold text-white/60">Jumlah ulasan</span>
-                <input
-                  type="number"
-                  min="0"
-                  value={form.reviews}
-                  onChange={(event) => updateField('reviews', event.target.value)}
                   className="input-field"
                 />
               </label>
@@ -663,7 +752,7 @@ export default function AdminProducts() {
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                 <span className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-[#eef1f3] to-[#c4c9ce]">
                   {preview || form.imageurl ? (
-                    <img src={preview || form.imageurl} alt="Pratinjau" className="h-full w-full object-cover" />
+                    <img src={assetUrl(preview || form.imageurl)} alt="Pratinjau" className="h-full w-full object-cover" />
                   ) : (
                     <span className="text-[10px] text-slate-500">Belum ada</span>
                   )}
@@ -687,6 +776,26 @@ export default function AdminProducts() {
           </form>
         </Modal>
       )}
+
+      <ConfirmDialog
+        open={Boolean(deleteTarget)}
+        title="Hapus produk ini?"
+        description={
+          deleteTarget ? (
+            <>
+              <span className="font-semibold text-white/80">"{deleteTarget.name}"</span> akan
+              dihapus dari katalog. Produk yang sudah pernah dipesan tetap tersimpan di riwayat
+              pesanan. Tindakan ini tidak bisa dibatalkan.
+            </>
+          ) : null
+        }
+        confirmLabel="Ya, hapus produk"
+        cancelLabel="Batal"
+        tone="danger"
+        busy={Boolean(busyId)}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

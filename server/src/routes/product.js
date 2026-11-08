@@ -164,9 +164,9 @@ router.put('/:id', authenticateAdmin, upload.single('image'), async (req, res) =
 
     const payload = {};
     const fields = [
-      'name', 'brand', 'tag', 'featured', 'price', 'stockStatus',
-      'categoryId', 'description', 'reviews', 'releaseYear', 'isNew',
-      'rating', 'performanceScore', 'cameraScore',
+      'name', 'brand', 'tag', 'featured', 'price', 'originalPrice', 'stock',
+      'stockStatus', 'badges', 'variants', 'categoryId', 'description',
+      'releaseYear', 'isNew', 'performanceScore', 'cameraScore',
     ];
 
     for (const field of fields) {
@@ -175,6 +175,13 @@ router.put('/:id', authenticateAdmin, upload.single('image'), async (req, res) =
 
     if (payload.price !== undefined) payload.price = Number(payload.price);
     if (payload.name !== undefined) payload.name = String(payload.name).trim();
+    if (payload.stock !== undefined) payload.stock = Number(payload.stock);
+    if (payload.originalPrice !== undefined) {
+      payload.originalPrice =
+        payload.originalPrice === '' || payload.originalPrice === 'null'
+          ? null
+          : Number(payload.originalPrice);
+    }
 
     for (const field of ['colors', 'colorNames', 'specs', 'highlights']) {
       if (req.body[field] !== undefined) payload[field] = req.body[field];

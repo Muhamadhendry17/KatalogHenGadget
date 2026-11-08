@@ -9,6 +9,9 @@ import categoryRoutes from './routes/categories.js';
 import productRoutes from './routes/product.js';
 import storeRoutes from './routes/store.js';
 import figmaRoutes from './routes/figma.js';
+import orderRoutes from './routes/orders.js';
+import addressRoutes from './routes/addresses.js';
+import passwordResetRoutes from './routes/passwordResets.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -63,6 +66,9 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/store', storeRoutes);
 app.use('/api/figma', figmaRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/addresses', addressRoutes);
+app.use('/api/password-resets', passwordResetRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({
@@ -80,6 +86,8 @@ app.get('/', (req, res) => {
       categories: '/api/categories',
       products: '/api/products',
       store: '/api/store',
+      orders: '/api/orders',
+      addresses: '/api/addresses',
       health: '/api/health',
     },
   });

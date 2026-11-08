@@ -13,30 +13,45 @@ function prune(now) {
   }
 }
 
-export function loginRateLimit(req, res, next) {
-  const now = Date.now();
-  if (attempts.size > 5000) prune(now);
+function makeRateLimit({ maxAttempts = MAX_ATTEMPTS, message, ipOnly = false }) {
+  return (req, res, next) => {
+    const now = Date.now();
+    if (attempts.size > 5000) prune(now);
 
-  const key = keyFor(req);
-  const bucket = attempts.get(key);
+    const key = ipOnly ? `${req.ip || 'unknown'}|ip-limited` : keyFor(req);
+    const bucket = attempts.get(key);
 
-  if (!bucket || now - bucket.start >= WINDOW_MS) {
-    attempts.set(key, { count: 1, start: now });
+    if (!bucket || now - bucket.start >= WINDOW_MS) {
+      attempts.set(key, { count: 1, start: now });
+      return next();
+    }
+
+    if (bucket.count >= maxAttempts) {
+      const retryAfter = Math.ceil((bucket.start + WINDOW_MS - now) / 1000);
+      res.set('Retry-After', String(retryAfter));
+      return res.status(429).json({ success: false, message });
+    }
+
+    bucket.count += 1;
     return next();
-  }
-
-  if (bucket.count >= MAX_ATTEMPTS) {
-    const retryAfter = Math.ceil((bucket.start + WINDOW_MS - now) / 1000);
-    res.set('Retry-After', String(retryAfter));
-    return res.status(429).json({
-      success: false,
-      message: 'Terlalu banyak percobaan login. Silakan coba lagi nanti.',
-    });
-  }
-
-  bucket.count += 1;
-  return next();
+  };
 }
+
+export const loginRateLimit = makeRateLimit({
+  maxAttempts: MAX_ATTEMPTS,
+  message: 'Terlalu banyak percobaan login. Silakan coba lagi nanti.',
+});
+
+export const forgotPasswordRateLimit = makeRateLimit({
+  maxAttempts: 5,
+  message: 'Terlalu banyak permintaan reset. Silakan coba lagi nanti.',
+});
+
+export const resetPasswordRateLimit = makeRateLimit({
+  maxAttempts: 10,
+  message: 'Terlalu banyak percobaan reset. Silakan coba lagi nanti.',
+  ipOnly: true,
+});
 
 export function clearLoginAttempts(req) {
   attempts.delete(keyFor(req));

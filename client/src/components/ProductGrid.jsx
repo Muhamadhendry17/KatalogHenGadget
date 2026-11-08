@@ -8,7 +8,7 @@ const sortOptions = [
   { value: 'recommended', label: 'Rekomendasi' },
   { value: 'price-asc', label: 'Harga termurah' },
   { value: 'price-desc', label: 'Harga tertinggi' },
-  { value: 'rating', label: 'Rating tertinggi' },
+  { value: 'newest', label: 'Rilis terbaru' },
 ];
 
 export default function ProductGrid({
@@ -73,7 +73,7 @@ export default function ProductGrid({
 
     if (sortMode === 'price-asc') list.sort((a, b) => a.price - b.price);
     if (sortMode === 'price-desc') list.sort((a, b) => b.price - a.price);
-    if (sortMode === 'rating') list.sort((a, b) => b.rating - a.rating);
+    if (sortMode === 'newest') list.sort((a, b) => b.releaseYear - a.releaseYear);
 
     return list;
   }, [pool, selectedBrand, activeMeta, query, sortMode]);

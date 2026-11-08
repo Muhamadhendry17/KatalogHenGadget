@@ -33,6 +33,20 @@ const links = [
       <path d="M12 15a3 3 0 100-6 3 3 0 000 6zm7.4-3a7.4 7.4 0 00-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 00-2-1.2L14.6 3h-4l-.4 2.6a7 7 0 00-2 1.2l-2.4-1-2 3.4 2 1.6A7.4 7.4 0 005.6 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 002 1.2l.4 2.6h4l.4-2.6a7 7 0 002-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z" strokeLinecap="round" strokeLinejoin="round" />
     ),
   },
+  {
+    to: '/admin/orders',
+    label: 'Pesanan',
+    icon: (
+      <path d="M3 3h2l.4 2M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707L15.414 5H12a1 1 0 00-.707.293L10.414 7H3a1 1 0 00-1 1v16a1 1 0 001 1zM7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707L15.414 5H12a1 1 0 00-.707.293L10.414 7H3a1 1 0 00-1 1v16a1 1 0 001 1z" strokeLinecap="round" strokeLinejoin="round" />
+    ),
+  },
+  {
+    to: '/admin/password-resets',
+    label: 'Reset Kata Sandi',
+    icon: (
+      <path d="M15 7a4 4 0 11-3.5 5.9L9 15.4V18H6.4L4 20.4V17l5.1-5.1A4 4 0 0115 7zm1.5 1.5h.01" strokeLinecap="round" strokeLinejoin="round" />
+    ),
+  },
 ];
 
 function NavItems({ onNavigate }) {

@@ -6,6 +6,7 @@ import ProductSelect from '../components/ProductSelect';
 import { useFormatCurrency } from '../contexts/CurrencyContext';
 import { normalizeWhatsAppNumber } from '../lib/phone';
 import { useCatalog } from '../contexts/CatalogContext';
+import { assetUrl } from '../lib/api';
 
 const specLabels = [
   'Layar',
@@ -149,7 +150,7 @@ export default function ComparePage() {
 
                   <div className="mt-4 rounded-2xl bg-gradient-to-br from-[#eef1f3] via-[#dfe3e6] to-[#c4c9ce] overflow-hidden">
                     <img
-                      src={product.image}
+                      src={assetUrl(product.image)}
                       alt={product.name}
                       className="w-full h-32 object-cover"
                       onError={(event) => {
@@ -184,13 +185,62 @@ export default function ComparePage() {
                 </div>
               ))}
 
+              <div className="contents">
+                <div className="border-b border-r border-white/10 bg-white/[0.02] px-4 py-4 text-sm text-white/50">
+                  Varian & harga
+                </div>
+                {columns.map((product) => (
+                  <div
+                    key={`variants-${product.id}`}
+                    className="border-b border-white/10 px-4 py-4 text-sm text-white/80"
+                  >
+                    {product.variants?.length ? (
+                      <ul className="space-y-1">
+                        {product.variants.map((variant) => (
+                          <li key={`${variant.storage}-${variant.price}`} className="text-xs">
+                            <span className="font-semibold text-white/85">{variant.storage}</span>{' '}
+                            <span className="text-cyan-300">{formatCurrency(variant.price)}</span>
+                            {Number(variant.stock) <= 0 && (
+                              <span className="ml-1 text-red-300">(habis)</span>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <span>—</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div className="contents">
+                <div className="border-b border-r border-white/10 bg-white/[0.02] px-4 py-4 text-sm text-white/50">
+                  Stok
+                </div>
+                {columns.map((product) => (
+                  <div
+                    key={`stock-${product.id}`}
+                    className="border-b border-white/10 px-4 py-4 text-sm"
+                  >
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-[11px] font-bold ${
+                        product.stockStatus === 'Habis'
+                          ? 'bg-red-500/15 text-red-300'
+                          : 'bg-emerald-500/15 text-emerald-300'
+                      }`}
+                    >
+                      {product.stockStatus === 'Habis' ? 'Habis' : `${product.stock} unit`}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
               <div className="border-r border-white/10 bg-white/[0.02] px-4 py-4 text-sm text-white/50">
-                Rating
+                Tahun rilis
               </div>
               {columns.map((product) => (
-                <div key={`rating-${product.id}`} className="px-4 py-4 text-sm text-white/80">
-                  <span className="text-amber-400">★</span> {product.rating.toFixed(1)}
-                  <span className="text-white/35"> ({product.reviews})</span>
+                <div key={`year-${product.id}`} className="px-4 py-4 text-sm text-white/80">
+                  {product.releaseYear}
                 </div>
               ))}
             </div>
@@ -223,8 +273,8 @@ export default function ComparePage() {
           </div>
 
           <p className="text-white/35 text-xs mt-6">
-            Catatan: harga contoh dapat berubah. Ketersediaan dan harga final dikonfirmasi
-            melalui WhatsApp sebelum pembelian.
+            Catatan: harga dapat berubah mengikuti pasar. Ketersediaan dan harga final
+            dikonfirmasi melalui WhatsApp sebelum pembelian.
           </p>
         </div>
       </main>

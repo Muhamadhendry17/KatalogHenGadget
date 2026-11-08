@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useCatalog } from '../../contexts/CatalogContext';
+import ConfirmDialog from '../../components/ConfirmDialog';
 import { apiRequest } from '../../lib/api';
 
 export default function AdminCategories() {
@@ -13,6 +14,7 @@ export default function AdminCategories() {
   const [editingName, setEditingName] = useState('');
   const [saving, setSaving] = useState(false);
   const [busyId, setBusyId] = useState('');
+  const [deleteTarget, setDeleteTarget] = useState(null);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
 
@@ -74,8 +76,9 @@ export default function AdminCategories() {
     }
   };
 
-  const handleDelete = async (category) => {
-    if (!window.confirm(`Hapus kategori "${category.name}"?`)) return;
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    const category = deleteTarget;
     setBusyId(category.id);
     resetMessages();
     try {
@@ -86,6 +89,7 @@ export default function AdminCategories() {
       setError(requestError.message);
     } finally {
       setBusyId('');
+      setDeleteTarget(null);
     }
   };
 
@@ -187,7 +191,7 @@ export default function AdminCategories() {
                       </button>
                       <button
                         type="button"
-                        onClick={() => handleDelete(category)}
+                        onClick={() => setDeleteTarget(category)}
                         disabled={busyId === category.id || (category.productCount ?? 0) > 0}
                         title={
                           (category.productCount ?? 0) > 0
@@ -209,6 +213,25 @@ export default function AdminCategories() {
           </ul>
         </section>
       </div>
+
+      <ConfirmDialog
+        open={Boolean(deleteTarget)}
+        title="Hapus kategori ini?"
+        description={
+          deleteTarget ? (
+            <>
+              Kategori <span className="font-semibold text-white/80">"{deleteTarget.name}"</span>{' '}
+              akan dihapus dari katalog. Kategori yang masih dipakai produk tidak bisa dihapus.
+            </>
+          ) : null
+        }
+        confirmLabel="Ya, hapus kategori"
+        cancelLabel="Batal"
+        tone="danger"
+        busy={Boolean(busyId)}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

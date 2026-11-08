@@ -34,6 +34,21 @@ console.log(`✅ Database "${DB}" & schema berhasil dibuat/diperbarui`);
 
 await conn.query(`USE ${DB}`);
 
+// ── Pastikan tabel produk & order menggunakan skema terbaru ─────────────────────
+// Drop tabel terkait produk agar kolom baru (stock, badges, variants, dsb.)
+// dapat dibuat ulang. Akun, settings, dan kategori tetap dipertahankan.
+await conn.query(`SET FOREIGN_KEY_CHECKS = 0`);
+await conn.query(`DROP TABLE IF EXISTS order_items`);
+await conn.query(`DROP TABLE IF EXISTS orders`);
+await conn.query(`DROP TABLE IF EXISTS addresses`);
+await conn.query(`DROP TABLE IF EXISTS password_reset_tokens`);
+await conn.query(`DROP TABLE IF EXISTS products`);
+await conn.query(`SET FOREIGN_KEY_CHECKS = 1`);
+
+// Jalankan schema (buat ulang tabel dengan kolom baru)
+await conn.query(schemaSql);
+console.log(`✅ Database "${DB}" & schema berhasil dibuat/diperbarui`);
+
 // ── Baca data.json ────────────────────────────────────────────────────────────
 const raw = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
 
@@ -93,12 +108,12 @@ for (const p of products) {
   if (!p.id || !p.name) continue;
   await conn.execute(
     `INSERT IGNORE INTO products
-       (id, name, brand, tag, featured, price, description, image,
-        category_id, category_name, stock_status,
-        colors, color_names, rating, reviews, release_year,
+       (id, name, brand, tag, featured, price, original_price, description, image,
+        category_id, category_name, stock_status, stock,
+        badges, variants, colors, color_names, release_year,
         is_new, performance_score, camera_score,
         specs, highlights, created_at, updated_at)
-     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
     [
       p.id,
       String(p.name || '').trim(),
@@ -106,15 +121,17 @@ for (const p of products) {
       String(p.tag || 'PILIHAN HENGADGET').trim(),
       p.featured ? 1 : 0,
       Number(p.price) || 0,
+      p.originalPrice != null ? Number(p.originalPrice) : null,
       p.description || '',
       p.image || '',
       p.categoryId || null,
       String(p.categoryName || '').trim(),
       ['Tersedia', 'Habis'].includes(p.stockStatus) ? p.stockStatus : 'Tersedia',
+      Number(p.stock) || 10,
+      JSON.stringify(Array.isArray(p.badges) ? p.badges : []),
+      JSON.stringify(Array.isArray(p.variants) ? p.variants : []),
       JSON.stringify(Array.isArray(p.colors) ? p.colors : []),
       JSON.stringify(Array.isArray(p.colorNames) ? p.colorNames : []),
-      Math.min(5, Math.max(0, Number(p.rating) || 0)),
-      Math.max(0, Math.round(Number(p.reviews) || 0)),
       p.releaseYear ? Number(p.releaseYear) : new Date().getFullYear(),
       p.isNew ? 1 : 0,
       Math.min(100, Math.max(0, Number(p.performanceScore) || 0)),

@@ -3,10 +3,15 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
 import { CatalogProvider } from './contexts/CatalogContext';
+import { FavoritesProvider } from './contexts/FavoritesContext';
 import Home from './pages/Home';
 import CatalogPage from './pages/CatalogPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import MyOrders from './pages/MyOrders';
+import FavoritesPage from './pages/Favorites';
 import ProductDetail from './pages/ProductDetail';
 import CartPage from './pages/Cart';
 import CheckoutPage from './pages/Checkout';
@@ -19,6 +24,8 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminCategories from './pages/admin/AdminCategories';
 import AdminSettings from './pages/admin/AdminSettings';
+import AdminOrders from './pages/admin/AdminOrders';
+import AdminPasswordResets from './pages/admin/AdminPasswordResets';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -68,34 +75,42 @@ export default function App() {
     <AuthProvider>
       <CatalogProvider>
         <CartProvider>
-          <ScrollToTop />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/catalog" element={<CatalogPage />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
-            <Route path="/compare" element={<ComparePage />} />
-            <Route path="/articles" element={<ArticlesPage />} />
-            <Route path="/article/:id" element={<ArticleDetail />} />
-            <Route path="/info/:slug" element={<InfoPage />} />
-            <Route path="/login" element={<AuthPage><Login /></AuthPage>} />
-            <Route path="/register" element={<AuthPage><Register /></AuthPage>} />
-            <Route
-              path="/admin"
-              element={
-                <AdminRoute>
-                  <AdminLayout />
-                </AdminRoute>
-              }
-            >
-              <Route index element={<AdminDashboard />} />
-              <Route path="products" element={<AdminProducts />} />
-              <Route path="categories" element={<AdminCategories />} />
-              <Route path="settings" element={<AdminSettings />} />
-            </Route>
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+          <FavoritesProvider>
+            <ScrollToTop />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/catalog" element={<CatalogPage />} />
+              <Route path="/favorit" element={<FavoritesPage />} />
+              <Route path="/product/:id" element={<ProductDetail />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/compare" element={<ComparePage />} />
+              <Route path="/articles" element={<ArticlesPage />} />
+              <Route path="/article/:id" element={<ArticleDetail />} />
+              <Route path="/info/:slug" element={<InfoPage />} />
+              <Route path="/login" element={<AuthPage><Login /></AuthPage>} />
+              <Route path="/register" element={<AuthPage><Register /></AuthPage>} />
+              <Route path="/lupa-kata-sandi" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/pesanansaya" element={<MyOrders />} />
+              <Route
+                path="/admin"
+                element={
+                  <AdminRoute>
+                    <AdminLayout />
+                  </AdminRoute>
+                }
+              >
+                <Route index element={<AdminDashboard />} />
+                <Route path="products" element={<AdminProducts />} />
+                <Route path="categories" element={<AdminCategories />} />
+                <Route path="orders" element={<AdminOrders />} />
+                <Route path="password-resets" element={<AdminPasswordResets />} />
+                <Route path="settings" element={<AdminSettings />} />
+              </Route>
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </FavoritesProvider>
         </CartProvider>
       </CatalogProvider>
     </AuthProvider>

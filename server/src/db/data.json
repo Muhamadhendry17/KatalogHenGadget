@@ -12,16 +12,6 @@
       "id": "cat_1",
       "name": "Smartphone",
       "slug": "smartphone"
-    },
-    {
-      "id": "cat_2",
-      "name": "Headphone",
-      "slug": "headphone"
-    },
-    {
-      "id": "cat_3",
-      "name": "Smartwatch",
-      "slug": "smartwatch"
     }
   ],
   "products": [
@@ -31,12 +21,33 @@
       "brand": "Samsung",
       "tag": "UNGGULAN PILIHAN",
       "featured": true,
-      "price": 19999000,
+      "price": 16999000,
+      "originalPrice": null,
       "description": "Flagship Samsung dengan performa premium, kamera luar biasa, dan layar yang sangat nyaman untuk editing dan gaming.",
       "image": "/assets/figma/samsung-galaxy-s24-ultra.png",
       "categoryId": "cat_1",
       "categoryName": "Smartphone",
+      "stock": 10,
       "stockStatus": "Tersedia",
+      "badges": [
+        "Best Seller"
+      ],
+      "variants": [
+        {
+          "storage": "256 GB",
+          "price": 16999000,
+          "stock": 10,
+          "color": "#d4d4d8",
+          "colorName": "Titanium Gray"
+        },
+        {
+          "storage": "512 GB",
+          "price": 20699000,
+          "stock": 10,
+          "color": "#2d2d2d",
+          "colorName": "Titanium Black"
+        }
+      ],
       "colors": [
         "#d4d4d8",
         "#2d2d2d",
@@ -47,8 +58,6 @@
         "Titanium Black",
         "Titanium Yellow"
       ],
-      "rating": 4.9,
-      "reviews": 2140,
       "releaseYear": 2024,
       "isNew": true,
       "performanceScore": 98,
@@ -93,12 +102,33 @@
       "brand": "Apple",
       "tag": "FAVORIT SEHARI-HARI",
       "featured": true,
-      "price": 12999000,
+      "price": 15499000,
+      "originalPrice": null,
       "description": "iPhone 15 memberikan keseimbangan sempurna antara performa, desain premium, dan kemudahan penggunaan harian.",
       "image": "/assets/figma/apple-iphone-15.png",
       "categoryId": "cat_1",
       "categoryName": "Smartphone",
+      "stock": 10,
       "stockStatus": "Tersedia",
+      "badges": [
+        "Best Seller"
+      ],
+      "variants": [
+        {
+          "storage": "128 GB",
+          "price": 15499000,
+          "stock": 10,
+          "color": "#becfe7",
+          "colorName": "Biru Muda"
+        },
+        {
+          "storage": "256 GB",
+          "price": 16999000,
+          "stock": 10,
+          "color": "#c0c0c0",
+          "colorName": "Silver"
+        }
+      ],
       "colors": [
         "#becfe7",
         "#c0c0c0",
@@ -109,8 +139,6 @@
         "Silver",
         "Biru Tua"
       ],
-      "rating": 4.8,
-      "reviews": 1890,
       "releaseYear": 2023,
       "isNew": false,
       "performanceScore": 95,
@@ -155,12 +183,34 @@
       "brand": "Xiaomi",
       "tag": "SPESIFIKASI TERBAIK",
       "featured": true,
-      "price": 4399000,
+      "price": 4499000,
+      "originalPrice": 4799000,
       "description": "Pilihan terbaik untuk kebutuhan harian dan gaming dengan harga yang sangat masuk akal untuk spesifikasi tinggi.",
       "image": "/assets/figma/redmi-note-13-pro-5g.png",
       "categoryId": "cat_1",
       "categoryName": "Smartphone",
+      "stock": 10,
       "stockStatus": "Tersedia",
+      "badges": [
+        "Promo",
+        "Best Seller"
+      ],
+      "variants": [
+        {
+          "storage": "256 GB",
+          "price": 4499000,
+          "stock": 10,
+          "color": "#d3c0ff",
+          "colorName": "Lavender"
+        },
+        {
+          "storage": "512 GB",
+          "price": 5499000,
+          "stock": 10,
+          "color": "#b0d7c6",
+          "colorName": "Mint"
+        }
+      ],
       "colors": [
         "#d3c0ff",
         "#b0d7c6",
@@ -171,8 +221,6 @@
         "Mint",
         "Lilac"
       ],
-      "rating": 4.8,
-      "reviews": 3120,
       "releaseYear": 2024,
       "isNew": false,
       "performanceScore": 78,
@@ -217,12 +265,33 @@
       "brand": "vivo",
       "tag": "ANDALAN POTRET",
       "featured": true,
-      "price": 5999000,
+      "price": 5499000,
+      "originalPrice": null,
       "description": "Smartphone dengan desain stylish, layar AMOLED, dan kamera potret yang cocok untuk multimedia sehari-hari.",
       "image": "/assets/figma/vivo-30.png",
       "categoryId": "cat_1",
       "categoryName": "Smartphone",
+      "stock": 10,
       "stockStatus": "Tersedia",
+      "badges": [
+        "Baru"
+      ],
+      "variants": [
+        {
+          "storage": "256 GB",
+          "price": 5499000,
+          "stock": 10,
+          "color": "#5ab4a8",
+          "colorName": "Hijau Tosca"
+        },
+        {
+          "storage": "512 GB",
+          "price": 6999000,
+          "stock": 10,
+          "color": "#d7dfe9",
+          "colorName": "Putih"
+        }
+      ],
       "colors": [
         "#5ab4a8",
         "#d7dfe9",
@@ -233,8 +302,6 @@
         "Putih",
         "Biru Gelap"
       ],
-      "rating": 4.7,
-      "reviews": 1480,
       "releaseYear": 2024,
       "isNew": false,
       "performanceScore": 80,
@@ -279,12 +346,31 @@
       "brand": "realme",
       "tag": "ZOOM PORTRAIT",
       "featured": true,
-      "price": 6499000,
+      "price": 5999000,
+      "originalPrice": null,
       "description": "realme 12 Pro+ 5G menghadirkan kamera telefoto periskop dan desain mewah di kelas menengah, cocok untuk foto potret dan zoom.",
       "image": "/assets/figma/realme-12-pro-plus-5g.png",
       "categoryId": "cat_1",
       "categoryName": "Smartphone",
+      "stock": 10,
       "stockStatus": "Tersedia",
+      "badges": [],
+      "variants": [
+        {
+          "storage": "256 GB",
+          "price": 5999000,
+          "stock": 10,
+          "color": "#e8622c",
+          "colorName": "Orange"
+        },
+        {
+          "storage": "512 GB",
+          "price": 6999000,
+          "stock": 10,
+          "color": "#d9b45c",
+          "colorName": "Gold"
+        }
+      ],
       "colors": [
         "#e8622c",
         "#d9b45c",
@@ -295,8 +381,6 @@
         "Gold",
         "Blue"
       ],
-      "rating": 4.8,
-      "reviews": 960,
       "releaseYear": 2024,
       "isNew": true,
       "performanceScore": 84,
@@ -341,12 +425,33 @@
       "brand": "OPPO",
       "tag": "DESAIN TIPIS",
       "featured": true,
-      "price": 6999000,
+      "price": 5999000,
+      "originalPrice": 7499000,
       "description": "OPPO Reno12 5G memadukan bodi tipis, layar melengkung, dan kamera potret AI yang siap menemani gaya hidup sehari-hari.",
       "image": "/assets/figma/oppo-reno12-5g.png",
       "categoryId": "cat_1",
       "categoryName": "Smartphone",
+      "stock": 10,
       "stockStatus": "Tersedia",
+      "badges": [
+        "Promo"
+      ],
+      "variants": [
+        {
+          "storage": "256 GB",
+          "price": 5999000,
+          "stock": 10,
+          "color": "#e8e2f2",
+          "colorName": "Silver"
+        },
+        {
+          "storage": "512 GB",
+          "price": 6999000,
+          "stock": 10,
+          "color": "#c9bde6",
+          "colorName": "Lilac"
+        }
+      ],
       "colors": [
         "#e8e2f2",
         "#c9bde6",
@@ -357,8 +462,6 @@
         "Lilac",
         "Abu-abu"
       ],
-      "rating": 4.7,
-      "reviews": 1120,
       "releaseYear": 2024,
       "isNew": true,
       "performanceScore": 82,
@@ -403,12 +506,34 @@
       "brand": "Samsung",
       "tag": "ANDALAN KELAS MENENGAH",
       "featured": false,
-      "price": 5999000,
+      "price": 4999000,
+      "originalPrice": 6499000,
       "description": "Samsung Galaxy A55 5G menawarkan bodi metal, layar Super AMOLED, dan kamera OIS yang seimbang untuk pemakaian harian jangka panjang.",
       "image": "/assets/figma/samsung-galaxy-a55-5g.png",
       "categoryId": "cat_1",
       "categoryName": "Smartphone",
+      "stock": 10,
       "stockStatus": "Tersedia",
+      "badges": [
+        "Promo",
+        "Best Seller"
+      ],
+      "variants": [
+        {
+          "storage": "128 GB",
+          "price": 4999000,
+          "stock": 10,
+          "color": "#a8c6e8",
+          "colorName": "Awesome Iceblue"
+        },
+        {
+          "storage": "256 GB",
+          "price": 5499000,
+          "stock": 10,
+          "color": "#2b3a55",
+          "colorName": "Awesome Navy"
+        }
+      ],
       "colors": [
         "#a8c6e8",
         "#2b3a55",
@@ -419,8 +544,6 @@
         "Awesome Navy",
         "Awesome Lilac"
       ],
-      "rating": 4.6,
-      "reviews": 2380,
       "releaseYear": 2024,
       "isNew": false,
       "performanceScore": 72,
@@ -465,12 +588,33 @@
       "brand": "Apple",
       "tag": "BARU · APPLE INTELLIGENCE",
       "featured": true,
-      "price": 14999000,
+      "price": 17999000,
+      "originalPrice": null,
       "description": "iPhone 16 membawa chip A18, tombol Camera Control, dan Apple Intelligence dalam bodi ringkas yang nyaman dipakai sehari-hari.",
       "image": "/assets/figma/apple-iphone-16.png",
       "categoryId": "cat_1",
       "categoryName": "Smartphone",
+      "stock": 10,
       "stockStatus": "Tersedia",
+      "badges": [
+        "Baru"
+      ],
+      "variants": [
+        {
+          "storage": "128 GB",
+          "price": 17999000,
+          "stock": 10,
+          "color": "#cfe3f2",
+          "colorName": "Ultramarine"
+        },
+        {
+          "storage": "256 GB",
+          "price": 19499000,
+          "stock": 10,
+          "color": "#f2efe8",
+          "colorName": "White"
+        }
+      ],
       "colors": [
         "#cfe3f2",
         "#f2efe8",
@@ -481,8 +625,6 @@
         "White",
         "Black"
       ],
-      "rating": 4.8,
-      "reviews": 1240,
       "releaseYear": 2024,
       "isNew": true,
       "performanceScore": 97,
@@ -527,12 +669,33 @@
       "brand": "Xiaomi",
       "tag": "FLAGSHIP KAMERA",
       "featured": true,
-      "price": 8999000,
+      "price": 7299000,
+      "originalPrice": null,
       "description": "Xiaomi 14T Pro menghadirkan kamera Leica, layar 144 Hz, dan pengisian 120W untuk performa flagship di harga kompetitif.",
       "image": "/assets/figma/xiaomi-14t-pro.png",
       "categoryId": "cat_1",
       "categoryName": "Smartphone",
+      "stock": 10,
       "stockStatus": "Tersedia",
+      "badges": [
+        "Baru"
+      ],
+      "variants": [
+        {
+          "storage": "256 GB",
+          "price": 7299000,
+          "stock": 10,
+          "color": "#2b2b2e",
+          "colorName": "Titan Black"
+        },
+        {
+          "storage": "512 GB",
+          "price": 8799000,
+          "stock": 10,
+          "color": "#a9b7c6",
+          "colorName": "Titan Blue"
+        }
+      ],
       "colors": [
         "#2b2b2e",
         "#a9b7c6",
@@ -543,8 +706,6 @@
         "Titan Blue",
         "Titan Gray"
       ],
-      "rating": 4.8,
-      "reviews": 860,
       "releaseYear": 2024,
       "isNew": true,
       "performanceScore": 93,
@@ -589,12 +750,31 @@
       "brand": "OPPO",
       "tag": "FLAGSHIP KOMPAK",
       "featured": false,
-      "price": 12999000,
+      "price": 11999000,
+      "originalPrice": null,
       "description": "OPPO Find X8 memadukan kamera Hasselblad, chip Dimensity 9400, dan desain ringkas dengan baterai besar dalam satu perangkat.",
       "image": "/assets/figma/oppo-find-x8.png",
       "categoryId": "cat_1",
       "categoryName": "Smartphone",
+      "stock": 10,
       "stockStatus": "Tersedia",
+      "badges": [],
+      "variants": [
+        {
+          "storage": "256 GB",
+          "price": 11999000,
+          "stock": 10,
+          "color": "#2f3336",
+          "colorName": "Black"
+        },
+        {
+          "storage": "512 GB",
+          "price": 14999000,
+          "stock": 10,
+          "color": "#e8e6df",
+          "colorName": "White"
+        }
+      ],
       "colors": [
         "#2f3336",
         "#e8e6df",
@@ -605,8 +785,6 @@
         "White",
         "Blue"
       ],
-      "rating": 4.8,
-      "reviews": 640,
       "releaseYear": 2024,
       "isNew": true,
       "performanceScore": 95,
@@ -651,12 +829,31 @@
       "brand": "vivo",
       "tag": "KAMERA ZEISS",
       "featured": false,
-      "price": 11999000,
+      "price": 9299000,
+      "originalPrice": null,
       "description": "vivo X100 dikenal dengan kamera ZEISS, chip Dimensity 9300, dan pengisian cepat 120W untuk fotografi dan performa kelas atas.",
       "image": "/assets/figma/vivo-x100.png",
       "categoryId": "cat_1",
       "categoryName": "Smartphone",
+      "stock": 10,
       "stockStatus": "Tersedia",
+      "badges": [],
+      "variants": [
+        {
+          "storage": "256 GB",
+          "price": 9299000,
+          "stock": 10,
+          "color": "#c9b7a4",
+          "colorName": "Asteroid Black"
+        },
+        {
+          "storage": "512 GB",
+          "price": 9999000,
+          "stock": 10,
+          "color": "#dbe3ea",
+          "colorName": "Blue"
+        }
+      ],
       "colors": [
         "#c9b7a4",
         "#dbe3ea",
@@ -667,8 +864,6 @@
         "Blue",
         "Sunset Orange"
       ],
-      "rating": 4.8,
-      "reviews": 720,
       "releaseYear": 2023,
       "isNew": false,
       "performanceScore": 94,
@@ -713,12 +908,31 @@
       "brand": "Samsung",
       "tag": "LIPAT MODERN",
       "featured": false,
-      "price": 16999000,
+      "price": 11999000,
+      "originalPrice": null,
       "description": "Galaxy Z Flip6 menawarkan desain lipat kompak, FlexWindow yang lebih fungsional, dan kamera 50 MP dengan bantuan AI.",
       "image": "/assets/figma/samsung-galaxy-z-flip6.png",
       "categoryId": "cat_1",
       "categoryName": "Smartphone",
+      "stock": 10,
       "stockStatus": "Tersedia",
+      "badges": [],
+      "variants": [
+        {
+          "storage": "256 GB",
+          "price": 11999000,
+          "stock": 10,
+          "color": "#f2d36b",
+          "colorName": "Yellow"
+        },
+        {
+          "storage": "512 GB",
+          "price": 12999000,
+          "stock": 10,
+          "color": "#b9c6d6",
+          "colorName": "Blue"
+        }
+      ],
       "colors": [
         "#f2d36b",
         "#b9c6d6",
@@ -729,8 +943,6 @@
         "Blue",
         "Silver Shadow"
       ],
-      "rating": 4.7,
-      "reviews": 540,
       "releaseYear": 2024,
       "isNew": true,
       "performanceScore": 92,
@@ -775,12 +987,31 @@
       "brand": "Apple",
       "tag": "PREMIUM MAKSIMAL",
       "featured": false,
-      "price": 22999000,
+      "price": 20499000,
+      "originalPrice": null,
       "description": "iPhone 16 Pro Max adalah pilihan tertinggi dengan layar 6,9 inci, chip A18 Pro, dan sistem kamera tetraprism untuk zoom jauh.",
       "image": "/assets/figma/apple-iphone-16-pro-max.png",
       "categoryId": "cat_1",
       "categoryName": "Smartphone",
+      "stock": 10,
       "stockStatus": "Tersedia",
+      "badges": [],
+      "variants": [
+        {
+          "storage": "256 GB",
+          "price": 20499000,
+          "stock": 10,
+          "color": "#b8b3a8",
+          "colorName": "Natural Titanium"
+        },
+        {
+          "storage": "512 GB",
+          "price": 21999000,
+          "stock": 10,
+          "color": "#3a3a3c",
+          "colorName": "Black Titanium"
+        }
+      ],
       "colors": [
         "#b8b3a8",
         "#3a3a3c",
@@ -791,8 +1022,6 @@
         "Black Titanium",
         "Desert Titanium"
       ],
-      "rating": 4.9,
-      "reviews": 980,
       "releaseYear": 2024,
       "isNew": true,
       "performanceScore": 100,
@@ -837,12 +1066,33 @@
       "brand": "Apple",
       "tag": "BARU · 2025",
       "featured": true,
-      "price": 34999000,
+      "price": 34249000,
+      "originalPrice": null,
       "description": "iPhone 17 Pro Max hadir dengan chip A19 Pro, sistem kamera triple 48 MP, dan penyimpanan 1TB untuk kreator yang butuh ruang ekstra.",
       "image": "/assets/figma/apple-iphone-17-pro-max.png",
       "categoryId": "cat_1",
       "categoryName": "Smartphone",
+      "stock": 10,
       "stockStatus": "Tersedia",
+      "badges": [
+        "Baru"
+      ],
+      "variants": [
+        {
+          "storage": "1 TB",
+          "price": 34249000,
+          "stock": 10,
+          "color": "#e8622c",
+          "colorName": "Cosmic Orange"
+        },
+        {
+          "storage": "2 TB",
+          "price": 43249000,
+          "stock": 10,
+          "color": "#2f4f7f",
+          "colorName": "Deep Blue"
+        }
+      ],
       "colors": [
         "#e8622c",
         "#2f4f7f",
@@ -853,8 +1103,6 @@
         "Deep Blue",
         "Silver"
       ],
-      "rating": 5,
-      "reviews": 420,
       "releaseYear": 2025,
       "isNew": true,
       "performanceScore": 100,
@@ -899,12 +1147,31 @@
       "brand": "vivo",
       "tag": "POTRET ZEISS",
       "featured": false,
-      "price": 7499000,
+      "price": 6999000,
+      "originalPrice": null,
       "description": "vivo V40 menghadirkan kamera ZEISS, baterai 5.500 mAh, dan desain tipis dengan perlindungan IP68 di kelas menengah atas.",
       "image": "/assets/figma/vivo-v40.png",
       "categoryId": "cat_1",
       "categoryName": "Smartphone",
+      "stock": 10,
       "stockStatus": "Tersedia",
+      "badges": [],
+      "variants": [
+        {
+          "storage": "128 GB",
+          "price": 6499000,
+          "stock": 10,
+          "color": "#b9c6d8",
+          "colorName": "Stellar Silver"
+        },
+        {
+          "storage": "256 GB",
+          "price": 6999000,
+          "stock": 10,
+          "color": "#d9b8c4",
+          "colorName": "Rose"
+        }
+      ],
       "colors": [
         "#b9c6d8",
         "#d9b8c4",
@@ -915,8 +1182,6 @@
         "Rose",
         "Nebula Blue"
       ],
-      "rating": 4.7,
-      "reviews": 690,
       "releaseYear": 2024,
       "isNew": true,
       "performanceScore": 80,
@@ -961,12 +1226,31 @@
       "brand": "realme",
       "tag": "KAMERA AI",
       "featured": false,
-      "price": 7999000,
+      "price": 6499000,
+      "originalPrice": null,
       "description": "realme 13 Pro+ membawa kamera AI Hyperimage, zoom periskop, dan desain artistik untuk pengalaman fotografi yang lebih ekspresif.",
       "image": "/assets/figma/realme-13-pro-plus.png",
       "categoryId": "cat_1",
       "categoryName": "Smartphone",
+      "stock": 10,
       "stockStatus": "Tersedia",
+      "badges": [],
+      "variants": [
+        {
+          "storage": "256 GB",
+          "price": 6499000,
+          "stock": 10,
+          "color": "#c7a45b",
+          "colorName": "Monet Gold"
+        },
+        {
+          "storage": "512 GB",
+          "price": 7999000,
+          "stock": 10,
+          "color": "#b6a7d6",
+          "colorName": "Lavender"
+        }
+      ],
       "colors": [
         "#c7a45b",
         "#b6a7d6",
@@ -977,8 +1261,6 @@
         "Lavender",
         "Navy"
       ],
-      "rating": 4.7,
-      "reviews": 580,
       "releaseYear": 2024,
       "isNew": true,
       "performanceScore": 83,
@@ -1015,6 +1297,244 @@
         "Desain artistik Monet"
       ],
       "createdAt": "2024-01-16T00:00:00.000Z",
+      "updatedAt": "2026-11-05T16:25:54.769Z"
+    },
+    {
+      "id": "redmi-13",
+      "name": "Redmi 13",
+      "brand": "Xiaomi",
+      "tag": "BUDGET ANDALAN",
+      "featured": false,
+      "price": 1899000,
+      "originalPrice": 2799000,
+      "description": "Handphone budget untuk Sukabumi dengan layar 90 Hz, kamera 108 MP, dan baterai tahan lama dalam harga yang ramah dompet.",
+      "image": "/assets/figma/redmi-note-13-pro-5g.png",
+      "categoryId": "cat_1",
+      "categoryName": "Smartphone",
+      "stock": 10,
+      "stockStatus": "Tersedia",
+      "badges": [
+        "Promo",
+        "Best Seller"
+      ],
+      "variants": [
+        {
+          "storage": "128 GB",
+          "price": 1899000,
+          "stock": 10,
+          "color": "#d3c0ff",
+          "colorName": "Lavender"
+        },
+        {
+          "storage": "256 GB",
+          "price": 2199000,
+          "stock": 10,
+          "color": "#b0d7c6",
+          "colorName": "Mint"
+        }
+      ],
+      "colors": [
+        "#d3c0ff",
+        "#b0d7c6"
+      ],
+      "colorNames": [
+        "Lavender",
+        "Mint"
+      ],
+      "releaseYear": 2024,
+      "isNew": true,
+      "performanceScore": 65,
+      "cameraScore": 78,
+      "specs": [
+        {
+          "label": "Layar",
+          "value": "6.79\" IPS LCD · 90 Hz"
+        },
+        {
+          "label": "Kamera utama",
+          "value": "108 MP"
+        },
+        {
+          "label": "Prosesor",
+          "value": "MediaTek Helio G91 Ultra"
+        },
+        {
+          "label": "RAM / Penyimpanan",
+          "value": "8 GB / 256 GB"
+        },
+        {
+          "label": "Baterai",
+          "value": "5.030 mAh · 33W"
+        },
+        {
+          "label": "Konektivitas",
+          "value": "4G · Wi-Fi 5"
+        }
+      ],
+      "highlights": [
+        "Layar besar 6,79 inci 90 Hz",
+        "Kamera 108 MP hasil tajam",
+        "Harga terjangkau untuk semua kalangan"
+      ],
+      "createdAt": "2026-11-01T00:00:00.000Z",
+      "updatedAt": "2026-11-05T16:25:54.769Z"
+    },
+    {
+      "id": "infinix-note-40",
+      "name": "Infinix Note 40",
+      "brand": "Infinix",
+      "tag": "BUDGET GAMING",
+      "featured": false,
+      "price": 2499000,
+      "originalPrice": 3499000,
+      "description": "Infinix Note 40 hadir dengan layar AMOLED 120 Hz, pengisian cepat 45W, dan baterai besar untuk aktivitas gaming sehari-hari di Sukabumi.",
+      "image": "/assets/figma/vivo-30.png",
+      "categoryId": "cat_1",
+      "categoryName": "Smartphone",
+      "stock": 10,
+      "stockStatus": "Tersedia",
+      "badges": [
+        "Promo"
+      ],
+      "variants": [
+        {
+          "storage": "128 GB",
+          "price": 2499000,
+          "stock": 10,
+          "color": "#5ab4a8",
+          "colorName": "Hijau Tosca"
+        },
+        {
+          "storage": "256 GB",
+          "price": 2799000,
+          "stock": 10,
+          "color": "#d7dfe9",
+          "colorName": "Putih"
+        }
+      ],
+      "colors": [
+        "#5ab4a8",
+        "#d7dfe9"
+      ],
+      "colorNames": [
+        "Hijau Tosca",
+        "Putih"
+      ],
+      "releaseYear": 2024,
+      "isNew": true,
+      "performanceScore": 68,
+      "cameraScore": 75,
+      "specs": [
+        {
+          "label": "Layar",
+          "value": "6.78\" AMOLED · 120 Hz"
+        },
+        {
+          "label": "Kamera utama",
+          "value": "108 MP + OIS"
+        },
+        {
+          "label": "Prosesor",
+          "value": "MediaTek Helio G99 Ultimate"
+        },
+        {
+          "label": "RAM / Penyimpanan",
+          "value": "8 GB / 256 GB"
+        },
+        {
+          "label": "Baterai",
+          "value": "5.000 mAh · 45W"
+        },
+        {
+          "label": "Konektivitas",
+          "value": "4G · Wi-Fi 5"
+        }
+      ],
+      "highlights": [
+        "Layar AMOLED 120 Hz halus",
+        "Pengisian cepat 45W + charge bypass",
+        "Speaker stereo dengan DTS"
+      ],
+      "createdAt": "2026-11-02T00:00:00.000Z",
+      "updatedAt": "2026-11-05T16:25:54.769Z"
+    },
+    {
+      "id": "samsung-galaxy-a15-4g",
+      "name": "Samsung Galaxy A15 4G",
+      "brand": "Samsung",
+      "tag": "BUDGET SAMSUNG",
+      "featured": false,
+      "price": 2899000,
+      "originalPrice": null,
+      "description": "Samsung Galaxy A15 4G menawarkan layar Super AMOLED 90 Hz, kamera 50 MP, dan jaminan pembaruan Samsung dengan harga terjangkau untuk warga Sukabumi.",
+      "image": "/assets/figma/samsung-galaxy-a55-5g.png",
+      "categoryId": "cat_1",
+      "categoryName": "Smartphone",
+      "stock": 10,
+      "stockStatus": "Tersedia",
+      "badges": [
+        "Best Seller"
+      ],
+      "variants": [
+        {
+          "storage": "128 GB",
+          "price": 2899000,
+          "stock": 10,
+          "color": "#a8c6e8",
+          "colorName": "Awesome Iceblue"
+        },
+        {
+          "storage": "256 GB",
+          "price": 3299000,
+          "stock": 10,
+          "color": "#2b3a55",
+          "colorName": "Awesome Navy"
+        }
+      ],
+      "colors": [
+        "#a8c6e8",
+        "#2b3a55"
+      ],
+      "colorNames": [
+        "Awesome Iceblue",
+        "Awesome Navy"
+      ],
+      "releaseYear": 2024,
+      "isNew": false,
+      "performanceScore": 62,
+      "cameraScore": 72,
+      "specs": [
+        {
+          "label": "Layar",
+          "value": "6.5\" Super AMOLED · 90 Hz"
+        },
+        {
+          "label": "Kamera utama",
+          "value": "50 MP + OIS"
+        },
+        {
+          "label": "Prosesor",
+          "value": "MediaTek Helio G99"
+        },
+        {
+          "label": "RAM / Penyimpanan",
+          "value": "4 GB / 128 GB"
+        },
+        {
+          "label": "Baterai",
+          "value": "5.000 mAh · 25W"
+        },
+        {
+          "label": "Konektivitas",
+          "value": "4G · Wi-Fi 5"
+        }
+      ],
+      "highlights": [
+        "Layar Super AMOLED 90 Hz",
+        "Kamera utama 50 MP dengan OIS",
+        "Dukungan pembaruan Samsung jangka panjang"
+      ],
+      "createdAt": "2026-11-03T00:00:00.000Z",
       "updatedAt": "2026-11-05T16:25:54.769Z"
     }
   ],

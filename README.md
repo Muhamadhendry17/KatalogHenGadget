@@ -1,70 +1,123 @@
 # HenGadget — Katalog Handphone
 
-Aplikasi katalog handphone dengan pengalaman belanja modern: filter yang benar-benar
-bekerja, perbandingan produk, keranjang, dan checkout melalui WhatsApp.
+Aplikasi katalog handphone (khusus smartphone) dengan pengalaman belanja modern:
+filter yang benar-benar bekerja, perbandingan spesifikasi, varian storasi, keranjang,
+checkout dengan alamat pengiriman, dan pengelolaan pesanan di dashboard admin.
 
 ## Fitur
 
-- **Beranda** — hero modern dengan aurora, grid halus, tilt 3D, carousel otomatis 16
-  handphone, daftar produk horizontal yang bisa digeser (satu baris, snap + tombol
-  panah di desktop), promo, artikel, dan footer.
-- **Katalog** — pencarian, filter merek, filter kebutuhan, dan pengurutan harga/rating.
-- **Filter fungsional**
-  - `Pilihan handphone` — semua produk.
-  - `Terbaru` — produk rilis terbaru.
-  - `Kamera unggul` — skor kamera ≥ 90.
-  - `Performa kencang` — skor performa ≥ 84.
-  - `Harga bersahabat` — harga ≤ Rp6,5 juta.
-- **Detail produk** — gambar, pemilih warna interaktif, spesifikasi, skor
-  performa/kamera, produk terkait. Memilih swatch warna ikut mengubah tampilan
-  bodi handphone secara visual (lapisan warna CSS pada foto produk).
-- **Produk terbaru** — `Apple iPhone 17 Pro Max 1TB` (A19 Pro, layar 6,9" 120 Hz,
-  kamera triple 48 MP, 12 GB / 1 TB).
-- **Perbandingan** — bandingkan 2–3 handphone dengan dropdown kustom yang menampilkan
-  thumbnail, harga, dan status pilihan.
-- **Wishlist** — tombol hati di kartu produk hanya menyimpan/menghapus produk tanpa
-  membuka halaman detail; status tersimpan di `localStorage`.
-- **Keranjang & Checkout** — panel checkout geser dari kanan, menampilkan gambar,
-  harga, jumlah, dan total; checkout membuka WhatsApp `6287777747462`.
-- **Artikel** — daftar dan halaman detail artikel.
-- **Halaman informasi** — panduan membeli, FAQ, cerita kami, cara memilih, kontak,
-  kebijakan privasi.
-- **Login / Register** — autentikasi JWT dengan penyimpanan JSON di server. Login
-  admin otomatis diarahkan ke dashboard; pendaftaran publik membuat akun
-  **customer** (tidak bisa mengubah katalog). Halaman auth memakai latar bertema
-  handphone: aurora, grid, kartu showcase produk, dan panel form kaca.
-  Kredensial admin tidak ditampilkan di halaman login.
-- **Dashboard admin** (`/admin`) — ringkasan statistik, kelola produk (tambah,
-  edit, hapus, upload gambar, toggle stok), kelola kategori, dan pengaturan toko.
-  Perubahan langsung dipakai storefront karena katalog membaca API.
+- **Beranda** — hero modern dengan aurora, grid halus, tilt 3D, carousel otomatis,
+  daftar produk horizontal yang bisa digeser, promo, artikel, dan footer.
+- **Katalog handphone** — pencarian, filter merek, filter kebutuhan, dan pengurutan
+  harga/tahun rilis. Kategori aktif hanya **Smartphone**.
+- **HP budget Rp2–4 juta** — `Redmi 13`, `Infinix Note 40`, dan `Samsung Galaxy A15 4G`
+  disiapkan untuk pasar Sukabumi.
+- **Detail produk** — pemilih warna dan varian storasi (64/128/256 GB) yang
+  memengaruhi harga dan stok, spesifikasi, skor performa/kamera, serta produk terkait.
+- **Harga promo** — beberapa produk memiliki harga coret (`originalPrice`) yang
+  ditampilkan dengan garis coret.
+- **Badge produk** — `Best Seller`, `Baru`, dan `Promo` dapat diatur per produk.
+- **Favorit** — tandai handphone dengan ikon hati; daftar favorit tersimpan di
+  perangkat dan bisa dibuka kembali kapan saja di halaman **Favorit**.
+- **Perbandingan** — bandingkan 2–3 handphone, termasuk RAM/penyimpanan, chipset
+  (prosesor), kamera, varian & harga, serta stok.
+- **Keranjang** — baris keranjang dipisahkan per produk + varian, jadi varian storasi
+  yang berbeda tidak saling menimpa.
+- **Checkout dengan alamat** — pelanggan wajib memilih/menambah alamat pengiriman.
+  Pesanan disimpan ke server dengan total yang dihitung dari harga produk/varian.
+- **Dua metode pesanan**
+  - **COD Sukabumi** — pembayaran tunai saat admin/worker bertemu pelanggan.
+  - **Logistik paket (luar kota)** — pembayaran transfer bank; pesanan diproses
+    setelah pembayaran dikonfirmasi admin.
+- **Lupa kata sandi** — permintaan token reset dari halaman login. Di mode
+  pengembangan token dikembalikan API agar bisa langsung dipakai; di production
+  token tidak boleh dikembalikan dan perlu layanan email.
+- **Dashboard admin** (`/admin`) — ringkasan statistik, kelola produk, kategori,
+  pesanan, dan pengaturan toko.
+  - Kelola pesanan menampilkan data pelanggan, alamat lengkap, item, metode
+    pembayaran/pengiriman, catatan, serta aksi status berikutnya.
+  - Alur status: `pending → paid → diproses → dikirim → selesai`
+    (COD dapat dikonfirmasi langsung ke `diproses`), atau `dibatalkan`.
 - **Katalog berbasis API** — produk, kategori, dan pengaturan toko dibaca dari
   server. Jika API belum menyala, storefront memakai data statis sebagai fallback.
 
 ## Menjalankan
 
-Butuh Node.js 20+.
+Butuh Node.js 20+ dan MySQL (XAMPP MySQL sudah didukung).
 
-Terminal 1 — API server:
+### 1. Siapkan MySQL
+
+Jalankan MySQL dari XAMPP, lalu buat konfigurasi server:
 
 ```powershell
 cd server
 npm install
-Copy-Item .env.example .env    # lalu isi JWT_SECRET dengan string acak
-node scripts/seed-catalog.js   # opsional: isi ulang katalog dari data storefront
-node src/index.js
+Copy-Item .env.example .env
+# Edit .env: DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME, dan JWT_SECRET
 ```
 
-Server berjalan di `http://localhost:3000`.
-
-Terminal 2 — client:
+### 2. Buat schema & isi data awal
 
 ```powershell
-cd client
+npm run migrate
+```
+
+Perintah ini membuat database `hengadget`, menjalankan `src/db/schema.sql`, dan
+mengimpor katalog awal dari `src/db/data.json`.
+
+> **Peringatan:** `npm run migrate` menghapus tabel produk, pesanan, alamat, dan
+> token reset sebelum mengimpor ulang. Jalankan hanya saat inisialisasi atau saat
+> memang ingin mengosongkan katalog/pesanan. Akun tidak dihapus.
+
+Untuk database yang **sudah berisi data** dan hanya perlu skema terbaru (snapshot
+pesanan, item pesanan tanpa rating, dll.), gunakan upgrade yang tidak menghapus data:
+
+```powershell
+npm run upgrade
+```
+
+Skrip ini idempotent dan aman dijalankan berulang kali.
+
+### 3. Jalankan server
+
+```powershell
+npm run dev
+# atau: node src/index.js
+```
+
+Server berjalan di `http://localhost:3000` (health check: `/api/health`).
+
+### 4. Jalankan client
+
+```powershell
+cd ../client
 npm install
 npm run dev
 ```
 
-Client berjalan di `http://localhost:5173`.
+Client berjalan di `http://localhost:5173` (Vite akan memakai port lain bila
+5173 sedang dipakai).
+
+## Alur pesanan
+
+1. Pelanggan menambahkan produk/varian ke keranjang dan membuka checkout.
+2. Pelanggan memilih/menambah alamat, lalu memilih metode:
+   - **COD Sukabumi** → `paymentMethod: cod`, `deliveryMethod: cod_sukabumi`.
+   - **Logistik paket** → `paymentMethod: transfer`, `deliveryMethod: logistik_paket`.
+3. Server memvalidasi kombinasi metode, kepemilikan alamat, stok, dan menghitung
+   total dari harga produk/varian. Total dari client tidak dipercaya.
+4. Pesanan masuk ke dashboard admin.
+   - Transfer: admin menandai **Dibayar** setelah dana masuk, lalu memproses dan
+     mengirim paket.
+   - COD: admin mengonfirmasi jadwal, memproses, lalu worker bertemu pelanggan.
+5. Status berlanjut sampai **Selesai**. Admin juga dapat membatalkan pesanan.
+
+### Aturan stok
+
+- Stok berupa bilangan bulat dan menjadi sumber kebenaran.
+- `0` → **Habis**; `> 0` → **Tersedia**.
+- Toggle stok di admin akan mengubah stok menjadi `0` (habis) atau mengisi ulang
+  minimal `10` (tersedia).
 
 ## Struktur singkat
 
@@ -74,40 +127,36 @@ client/
     components/   Navbar, Footer, Logo, Hero, ProductCard, ProductGrid,
                   ProductSelect, ArticleCard, AuthShell
     components/admin/  AdminLayout (sidebar + proteksi tampilan)
-    contexts/     AuthContext, CartContext, CatalogContext
-    data/         products.js (artikel, filter, efek warna; fallback katalog)
+    contexts/     AuthContext, CartContext, CatalogContext, CurrencyContext
+    data/         products.js (artikel, filter, fallback katalog)
     lib/          api.js (fetch + token), phone.js (format WhatsApp)
     pages/        Home, CatalogPage, ProductDetail, Compare, Cart, Checkout,
-                  Articles, ArticleDetail, InfoPage, Login, Register
-    pages/admin/  AdminDashboard, AdminProducts, AdminCategories, AdminSettings
+                  Articles, ArticleDetail, InfoPage, Login, Register,
+                  ForgotPassword, MyOrders
+    pages/admin/  AdminDashboard, AdminProducts, AdminCategories,
+                  AdminOrders, AdminSettings
 server/
   assets/figma/   gambar produk & artikel
   scripts/        seed-catalog.js + pipeline komposit gambar produk
   src/            Express API + static assets (assets/figma, uploads)
-  src/db/         data.json + akses database JSON
+  src/db/         schema.sql, migrate.js, upgrade.js, mysql.js, db.js, data.json
+  src/routes/     auth, categories, product, store, orders, addresses, figma
 ```
-
-## Aset gambar
-
-Gambar produk utama diekspor dari desain Figma. Gambar produk merek lain diambil
-dari GSMArena, lalu dikomposit ke latar studio 632×516 yang sama agar tampilan
-kartu konsisten. Thumbnail artikel disimpan lokal agar tidak bergantung pada
-layanan gambar eksternal.
 
 ## Catatan
 
-- Harga di katalog adalah harga contoh. Harga final, stok, dan ongkir dikonfirmasi
-  melalui WhatsApp.
+- Harga di katalog mengikuti harga pasar terkini. Harga final, stok, dan ongkir
+  dikonfirmasi melalui WhatsApp.
 - Nomor WhatsApp checkout: **+62 877-7774-7462** (`6287777747462`).
-- Akun admin dikelola di `server/src/db/data.json`; halaman register publik hanya
-  membuat akun customer. Kredensial admin tidak ditampilkan di UI. Gunakan
-  password yang kuat dan jangan commit kredensial ke repository publik.
-- Isi `JWT_SECRET` di `server/.env` (lihat `server/.env.example`) sebelum deploy.
-  `ADMIN_PASSWORD` hanya dipakai saat membuat password admin awal dari placeholder.
-- Skrip verifikasi UI membaca kredensial dari environment, bukan hardcoded:
-  `$env:ADMIN_EMAIL="..."; $env:ADMIN_PASSWORD="..."; node scripts/verify-admin.mjs`.
-- Akun baru dari halaman register berperan **customer**. Akun lama di
-  `data.json` dipertahankan sebagai admin.
-- Endpoint mutasi (`POST/PUT/PATCH/DELETE` produk, kategori, pengaturan toko)
-  membutuhkan token dengan role `admin`.
-- Data pengguna dan produk disimpan di `server/src/db/data.json` (bukan SQLite).
+- Akun admin disimpan di tabel `accounts` (MySQL). Halaman register publik hanya
+  membuat akun customer. Kredensial admin tidak ditampilkan di UI.
+- Isi `JWT_SECRET` di `server/.env` sebelum deploy.
+- Endpoint mutasi (`POST/PUT/PATCH/DELETE` produk, kategori, pengaturan toko,
+  pesanan) membutuhkan token dengan role `admin` (kecuali pembuatan pesanan dan
+  alamat milik pelanggan sendiri).
+- Reset password memakai token sekali pakai yang berlaku 1 jam. Token lama
+  otomatis tidak berlaku saat token baru dibuat.
+- Di production (`NODE_ENV=production`), API tidak mengembalikan token reset.
+  Hubungkan ke layanan email sebelum mengandalkan alur ini di production.
+- Data utama disimpan di MySQL (bukan JSON). `data.json` hanya dipakai sebagai
+  sumber seed saat migrasi.

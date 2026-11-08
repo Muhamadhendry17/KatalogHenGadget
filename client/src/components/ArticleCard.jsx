@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { articles, getProductById } from '../data/products';
 import { useFormatCurrency } from '../contexts/CurrencyContext';
+import { assetUrl } from '../lib/api';
 
 export default function ArticleCard({ article }) {
   return (
@@ -8,7 +9,7 @@ export default function ArticleCard({ article }) {
       <Link to={`/article/${article.id}`} className="block">
         <div className="relative h-48 overflow-hidden">
           <img
-            src={article.image}
+            src={assetUrl(article.image)}
             alt={article.title}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
@@ -129,7 +130,7 @@ export function TrustSection() {
     {
       icon: '💬',
       title: 'Transparan sejak awal',
-      description: 'Harga contoh ditampilkan jelas. Ketersediaan dikonfirmasi lewat WhatsApp.',
+      description: 'Harga pasar ditampilkan jelas. Ketersediaan dikonfirmasi lewat WhatsApp.',
     },
   ];
 

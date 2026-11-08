@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import AuthShell from '../components/AuthShell';
+import { apiUrl } from '../lib/api';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -18,7 +19,7 @@ export default function Login() {
     setError('');
 
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch(apiUrl('/api/auth/login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -34,7 +35,7 @@ export default function Login() {
         role: data.user.role,
         token: data.token,
       });
-      navigate(data.user.role === 'admin' ? '/admin' : '/');
+      navigate(data.user.role === 'admin' ? '/admin' : (location.state?.from || '/'));
     } catch (err) {
       setError(err.message);
     } finally {
@@ -46,7 +47,7 @@ export default function Login() {
     <AuthShell
       eyebrow="Masuk ke HenGadget"
       title="Selamat datang kembali"
-      subtitle="Masuk untuk menyimpan wishlist dan mempercepat proses checkout."
+      subtitle="Masuk untuk menyimpan favorit dan mempercepat proses checkout."
       footer={
         <p className="text-center text-sm text-white/50">
           Belum punya akun?{' '}
@@ -115,6 +116,13 @@ export default function Login() {
         >
           {loading ? 'Memproses...' : 'Masuk'}
         </button>
+
+        <p className="mt-4 text-center text-sm text-white/40">
+          Lupa kata sandi?{' '}
+          <Link to="/lupa-kata-sandi" className="font-semibold text-cyan-400 transition-colors hover:text-cyan-300">
+            Atur ulang di sini
+          </Link>
+        </p>
       </form>
     </AuthShell>
   );

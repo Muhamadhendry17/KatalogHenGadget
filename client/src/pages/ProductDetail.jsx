@@ -5,15 +5,19 @@ import Footer from '../components/Footer';
 import ProductCard from '../components/ProductCard';
 import { useCart } from '../contexts/CartContext';
 import { useCatalog } from '../contexts/CatalogContext';
+import { useFavorites } from '../contexts/FavoritesContext';
 import { useFormatCurrency } from '../contexts/CurrencyContext';
 import { getColorEffect } from '../data/products';
+import { assetUrl } from '../lib/api';
 import { normalizeWhatsAppNumber } from '../lib/phone';
 
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addItem } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [selectedColor, setSelectedColor] = useState(0);
+  const [selectedVariant, setSelectedVariant] = useState(0);
   const [toast, setToast] = useState('');
   const { products, getProductById, loading, settings } = useCatalog();
   const formatCurrency = useFormatCurrency();
@@ -59,31 +63,46 @@ export default function ProductDetail() {
     );
   }
 
+  const variants = product.variants?.length ? product.variants : [{ storage: '', price: product.price, stock: product.stock, color: product.colors?.[0], colorName: product.colorNames?.[0] || 'Default' }];
+  const activeVariant = variants[selectedVariant] || variants[0];
+  const activeColor = variants.length ? (product.colors[selectedColor] || product.colors[0]) : activeVariant.color;
+  const activeColorName = product.colorNames?.[selectedColor] || activeVariant.colorName || 'Warna pilihan';
+  const colorEffect = getColorEffect(activeColor, selectedColor > 0 || variants.length > 1);
+
+  // Warna dan penyimpanan adalah dua pilihan terpisah. Jangan saling
+  // mengubah indeks, karena dulu memilih warna ikut memindahkan storasi
+  // (dan sebaliknya) sehingga dua tombol terlihat terpilih bersamaan.
+  const chooseVariant = (index) => {
+    setSelectedVariant(index);
+  };
+
+  const chooseColor = (index) => {
+    setSelectedColor(index);
+  };
+
   const related = products
     .filter((item) => item.id !== product.id)
-    .sort((a, b) => b.rating - a.rating)
+    .sort((a, b) => b.releaseYear - a.releaseYear)
     .slice(0, 3);
 
-  const activeColor = product.colors[selectedColor] || product.colors[0];
-  const activeColorName = product.colorNames?.[selectedColor] || 'Warna pilihan';
-  const colorEffect = getColorEffect(activeColor, selectedColor > 0);
+  const saved = isFavorite(product.id);
 
   const whatsappUrl =
     `https://wa.me/${normalizeWhatsAppNumber(settings.phone)}?text=` +
     encodeURIComponent(
-      `Halo HenGadget, saya ingin menanyakan ketersediaan dan kesiapan ${product.name}. Apakah stoknya tersedia dan siap dikirim?`
+      `Halo HenGadget, saya ingin menanyakan ketersediaan dan kesiapan ${product.name} (${activeVariant.storage ? activeVariant.storage + ' - ' : ''}${activeColorName}). Apakah stoknya tersedia dan siap dikirim?`
     );
 
   const handleAddToCart = () => {
-    if (product.stockStatus === 'Habis') return;
-    addItem(product);
+    if (product.stockStatus === 'Habis' || (activeVariant.stock != null && activeVariant.stock <= 0)) return;
+    addItem({ ...product, price: activeVariant.price, varian: `${activeVariant.storage || ''} ${activeColorName || ''}`.trim() });
     setToast(`${product.name} ditambahkan ke keranjang`);
     window.setTimeout(() => setToast(''), 3000);
   };
 
   const handleBuyNow = () => {
-    if (product.stockStatus === 'Habis') return;
-    addItem(product);
+    if (product.stockStatus === 'Habis' || (activeVariant.stock != null && activeVariant.stock <= 0)) return;
+    addItem({ ...product, price: activeVariant.price, varian: `${activeVariant.storage || ''} ${activeColorName || ''}`.trim() });
     navigate('/checkout');
   };
 
@@ -110,7 +129,7 @@ export default function ProductDetail() {
                   style={{ background: colorEffect.glow, opacity: selectedColor > 0 ? 1 : 0 }}
                 />
                 <img
-                  src={product.image}
+                  src={assetUrl(product.image)}
                   alt={`${product.name} warna ${activeColorName}`}
                   className="relative w-full h-[340px] sm:h-[440px] object-contain transition-[filter] duration-500"
                   style={{ filter: colorEffect.filter }}
@@ -139,6 +158,26 @@ export default function ProductDetail() {
                 <span className="absolute top-4 left-4 rounded-md bg-black/70 backdrop-blur px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-cyan-300">
                   {product.tag}
                 </span>
+                {product.badges?.length && (
+                  <div className="absolute top-12 right-4 flex flex-col gap-1.5">
+                    {product.badges.map((badge, idx) => {
+                      const variant =
+                        badge === 'Promo'
+                          ? 'bg-emerald-500 text-emerald-900'
+                          : badge === 'Best Seller'
+                            ? 'bg-amber-500 text-[#04111c]'
+                            : 'bg-cyan-500 text-[#04111c]';
+                      return (
+                        <span
+                          key={idx}
+                          className={`rounded-md px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-md ${variant}`}
+                        >
+                          {badge}
+                        </span>
+                      );
+                    })}
+                  </div>
+                )}
                 <span className="absolute top-4 right-4 flex items-center gap-2 rounded-full bg-black/55 backdrop-blur px-3 py-1.5 text-[11px] font-semibold text-white/85">
                   <span
                     className="w-3 h-3 rounded-full border border-white/40"
@@ -160,7 +199,7 @@ export default function ProductDetail() {
                   {product.colors.map((color, index) => (
                     <button
                       key={color}
-                      onClick={() => setSelectedColor(index)}
+                      onClick={() => chooseColor(index)}
                       aria-label={`Warna ${product.colorNames?.[index] || index + 1}`}
                       aria-pressed={selectedColor === index}
                       title={product.colorNames?.[index] || color}
@@ -180,6 +219,34 @@ export default function ProductDetail() {
                   ))}
                 </div>
               </div>
+
+              {product.variants?.length && product.variants.length > 1 && (
+                <div className="mt-4 flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-4">
+                  <div>
+                    <p className="text-white/40 text-[10px] uppercase tracking-wider">Pilih varian penyimpanan</p>
+                    <p className="text-white text-sm font-medium">{activeVariant.storage}</p>
+                    <p className="text-white/35 text-[11px] mt-0.5">
+                      Penyimpanan memengaruhi harga akhir
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {variants.map((variant, index) => (
+                      <button
+                        key={variant.storage}
+                        onClick={() => chooseVariant(index)}
+                        aria-pressed={selectedVariant === index}
+                        className={`px-4 py-2 rounded-lg text-xs font-medium border transition-all ${
+                          selectedVariant === index
+                            ? 'border-cyan-400 bg-cyan-400/20 text-white'
+                            : 'border-white/10 text-white/50 hover:bg-white/5 hover:text-white'
+                        }`}
+                      >
+                        {variant.storage}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div>
@@ -187,11 +254,31 @@ export default function ProductDetail() {
                 <span className="text-cyan-300 text-xs font-bold uppercase tracking-[0.18em]">
                   {product.brand}
                 </span>
-                <span className="text-sm text-white/60 flex items-center gap-1.5">
-                  <span className="text-amber-400">★</span>
-                  {product.rating.toFixed(1)}
-                  <span className="text-white/35">({product.reviews} ulasan)</span>
-                </span>
+                <button
+                  type="button"
+                  onClick={() => toggleFavorite(product.id)}
+                  aria-pressed={saved}
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                    saved
+                      ? 'border-cyan-400/50 bg-cyan-400/15 text-cyan-300'
+                      : 'border-white/15 text-white/55 hover:border-cyan-400/40 hover:text-cyan-300'
+                  }`}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4"
+                    fill={saved ? 'currentColor' : 'none'}
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                  >
+                    <path
+                      d="M12 20s-7-4.35-7-9a4 4 0 017-2.65A4 4 0 0119 11c0 4.65-7 9-7 9z"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  {saved ? 'Tersimpan' : 'Simpan favorit'}
+                </button>
               </div>
 
               <h1 className="text-3xl sm:text-4xl font-extrabold text-white mt-3">
@@ -200,15 +287,30 @@ export default function ProductDetail() {
               <p className="text-white/55 mt-3 leading-relaxed">{product.description}</p>
 
               <div className="mt-6 rounded-2xl border border-cyan-400/15 bg-cyan-400/[0.06] px-5 py-4">
-                <span className="block text-white/40 text-[10px] uppercase tracking-wider">Harga contoh</span>
+                <span className="block text-white/40 text-[10px] uppercase tracking-wider">Harga</span>
                 <div className="flex items-end gap-3">
-                  <span className="text-3xl font-extrabold text-white">{formatCurrency(product.price)}</span>
-                  <span className="text-white/35 text-sm line-through">
-                    {formatCurrency(Math.round(product.price * 1.12))}
-                  </span>
+                  <span className="text-3xl font-extrabold text-white">{formatCurrency(activeVariant.price)}</span>
+                  {product.originalPrice && product.originalPrice > activeVariant.price && (
+                    <span className="text-white/35 text-sm line-through">
+                      {formatCurrency(product.originalPrice)}
+                    </span>
+                  )}
                 </div>
                 <p className="text-cyan-300/80 text-xs mt-2">
-                  Ketersediaan dan harga final dikonfirmasi lewat WhatsApp.
+                  Harga mengikuti harga pasar terkini. Ketersediaan dan harga final dikonfirmasi lewat WhatsApp.
+                </p>
+                <p className="mt-2 text-xs">
+                  <span
+                    className={`rounded-full px-2.5 py-1 font-bold ${
+                      product.stockStatus === 'Habis' || Number(activeVariant.stock) <= 0
+                        ? 'bg-red-500/15 text-red-300'
+                        : 'bg-emerald-500/15 text-emerald-300'
+                    }`}
+                  >
+                    {product.stockStatus === 'Habis' || Number(activeVariant.stock) <= 0
+                      ? 'Stok habis'
+                      : `Stok tersedia: ${activeVariant.stock ?? product.stock} unit`}
+                  </span>
                 </p>
               </div>
 
@@ -226,14 +328,14 @@ export default function ProductDetail() {
               <div className="mt-8 grid sm:grid-cols-2 gap-3">
                 <button
                   onClick={handleAddToCart}
-                  disabled={product.stockStatus === 'Habis'}
+                  disabled={product.stockStatus === 'Habis' || (activeVariant.stock != null && activeVariant.stock <= 0)}
                   className="rounded-xl bg-cyan-500 hover:bg-cyan-400 text-[#04111c] font-bold py-3.5 px-5 transition-colors disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/30"
                 >
-                  {product.stockStatus === 'Habis' ? 'Stok Habis' : 'Tambahkan ke Keranjang'}
+                  {product.stockStatus === 'Habis' || (activeVariant.stock != null && activeVariant.stock <= 0) ? 'Stok Habis' : 'Tambahkan ke Keranjang'}
                 </button>
                 <button
                   onClick={handleBuyNow}
-                  disabled={product.stockStatus === 'Habis'}
+                  disabled={product.stockStatus === 'Habis' || (activeVariant.stock != null && activeVariant.stock <= 0)}
                   className="rounded-xl border border-white/15 text-white font-bold py-3.5 px-5 hover:bg-white/5 transition-colors disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Beli Langsung

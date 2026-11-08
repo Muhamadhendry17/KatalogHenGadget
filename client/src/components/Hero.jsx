@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useFormatCurrency } from '../contexts/CurrencyContext';
 import { normalizeWhatsAppNumber } from '../lib/phone';
+import { assetUrl } from '../lib/api';
 import { useCatalog } from '../contexts/CatalogContext';
 
 const WHATSAPP_MESSAGE = encodeURIComponent(
@@ -148,7 +149,7 @@ export default function Hero() {
                   <div
                     key={reviewer.initials}
                     className={`flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#070b14] bg-gradient-to-br ${reviewer.gradient} text-[10px] font-extrabold text-[#04111c]`}
-                    title={`Ulasan dari ${reviewer.initials}`}
+                    title={`Testimoni dari ${reviewer.initials}`}
                   >
                     {reviewer.initials}
                   </div>
@@ -159,7 +160,7 @@ export default function Hero() {
                   4.9/5
                   <span className="text-xs tracking-tight text-amber-400">★★★★★</span>
                 </p>
-                <p className="text-xs text-white/50">15.000+ ulasan terverifikasi</p>
+                <p className="text-xs text-white/50">15.000+ pelanggan puas</p>
               </div>
               <div className="hidden h-9 w-px bg-white/10 sm:block" />
               <div className="hidden sm:block">
@@ -205,7 +206,7 @@ export default function Hero() {
 
                     <div key={active.id} className="animate-product-in relative">
                       <img
-                        src={active.image}
+                        src={assetUrl(active.image)}
                         alt={active.name}
                         className="h-[300px] w-full object-cover object-center sm:h-[390px] lg:h-[420px]"
                         onError={(event) => {

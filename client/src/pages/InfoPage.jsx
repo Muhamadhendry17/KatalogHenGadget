@@ -35,7 +35,7 @@ const pages = {
       {
         heading: '4. Konfirmasi stok lewat WhatsApp',
         paragraphs: [
-          'Harga di katalog adalah harga contoh. Sebelum memutuskan, tanyakan ketersediaan, warna, garansi, dan estimasi pengiriman melalui WhatsApp agar tidak ada kejutan.',
+          'Harga di katalog mengikuti harga pasar terkini. Sebelum memutuskan, tanyakan ketersediaan, warna, garansi, dan estimasi pengiriman melalui WhatsApp agar tidak ada kejutan.',
         ],
       },
     ],
@@ -48,7 +48,7 @@ const pages = {
       {
         heading: 'Apakah harga di katalog sudah final?',
         paragraphs: [
-          'Harga yang ditampilkan adalah harga contoh untuk membantu perbandingan. Harga final dan ketersediaan dikonfirmasi melalui WhatsApp sebelum pembelian.',
+          'Harga yang ditampilkan mengikuti harga pasar untuk membantu perbandingan. Harga final dan ketersediaan dikonfirmasi melalui WhatsApp sebelum pembelian.',
         ],
       },
       {
@@ -86,14 +86,14 @@ const pages = {
       {
         heading: 'Berawal dari kebingungan yang sama',
         paragraphs: [
-          'Terlalu banyak istilah, terlalu banyak angka, dan terlalu banyak ulasan yang saling bertentangan. Kami merangkum hal-hal yang benar-benar terasa di pemakaian harian.',
+          'Terlalu banyak istilah, terlalu banyak angka, dan terlalu banyak pendapat yang saling bertentangan. Kami merangkum hal-hal yang benar-benar terasa di pemakaian harian.',
           'Setiap rekomendasi dimulai dari kebutuhan: kamera, performa, baterai, atau budget. Bukan dari merek yang paling ramai diiklankan.',
         ],
       },
       {
         heading: 'Transparan sejak awal',
         paragraphs: [
-          'Harga contoh ditampilkan terbuka. Ketersediaan dan harga final dikonfirmasi langsung lewat WhatsApp, tanpa biaya tersembunyi.',
+          'Harga ditampilkan terbuka sesuai pasar. Ketersediaan dan harga final dikonfirmasi langsung lewat WhatsApp, tanpa biaya tersembunyi.',
         ],
       },
     ],

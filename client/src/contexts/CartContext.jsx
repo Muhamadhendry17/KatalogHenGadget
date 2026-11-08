@@ -3,6 +3,9 @@ import { createContext, useContext, useEffect, useState } from 'react';
 const CartContext = createContext(null);
 const STORAGE_KEY = 'hengadget_cart';
 
+const cartKeyOf = (item) =>
+  item.cartKey || `${item.id}::${String(item.varian || '').trim()}`;
+
 function readStoredCart() {
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
@@ -11,6 +14,7 @@ function readStoredCart() {
       .filter((item) => item && item.id && Number.isFinite(Number(item.price)))
       .map((item) => ({
         ...item,
+        cartKey: cartKeyOf(item),
         price: Number(item.price),
         qty: Math.max(1, Math.min(99, Math.round(Number(item.qty) || 1))),
       }));
@@ -32,28 +36,29 @@ export function CartProvider({ children }) {
   }, [items]);
 
   const addItem = (product) => {
+    const cartKey = cartKeyOf(product);
     setItems((prev) => {
-      const existing = prev.find((i) => i.id === product.id);
+      const existing = prev.find((i) => i.cartKey === cartKey);
       if (existing) {
         return prev.map((i) =>
-          i.id === product.id ? { ...i, qty: Math.min(99, i.qty + 1) } : i
+          i.cartKey === cartKey ? { ...i, qty: Math.min(99, i.qty + 1) } : i
         );
       }
-      return [...prev, { ...product, qty: 1 }];
+      return [...prev, { ...product, cartKey, qty: 1 }];
     });
   };
 
-  const removeItem = (id) => {
-    setItems((prev) => prev.filter((i) => i.id !== id));
+  const removeItem = (cartKey) => {
+    setItems((prev) => prev.filter((i) => i.cartKey !== cartKey));
   };
 
-  const updateQty = (id, qty) => {
+  const updateQty = (cartKey, qty) => {
     if (qty <= 0) {
-      removeItem(id);
+      removeItem(cartKey);
       return;
     }
     setItems((prev) =>
-      prev.map((i) => (i.id === id ? { ...i, qty: Math.min(99, qty) } : i))
+      prev.map((i) => (i.cartKey === cartKey ? { ...i, qty: Math.min(99, qty) } : i))
     );
   };
 

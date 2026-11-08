@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import { getProductById } from '../data/products';
 import { useFormatCurrency } from '../contexts/CurrencyContext';
+import { assetUrl } from '../lib/api';
 
 const SHOWCASE = [
   { id: 'apple-iphone-17-pro-max', label: 'Baru 2025', wide: true },
@@ -28,7 +29,7 @@ function ShowcaseCard({ item }) {
     >
       <div className="absolute inset-0 bg-gradient-to-b from-white/[0.06] to-transparent" />
       <img
-        src={product.image}
+        src={assetUrl(product.image)}
         alt={product.name}
         className={`relative w-full bg-gradient-to-br from-[#eef1f3] via-[#e2e6e9] to-[#c6cbd0] object-contain ${
           item.wide ? 'h-36 sm:h-40' : 'h-28'

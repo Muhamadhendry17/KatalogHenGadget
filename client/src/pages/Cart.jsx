@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import { useFormatCurrency } from '../contexts/CurrencyContext';
+import { assetUrl } from '../lib/api';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
@@ -63,7 +64,7 @@ export default function CartPage() {
             <div className="space-y-4">
               {items.map((item) => (
                 <div
-                  key={item.id}
+                  key={item.cartKey}
                   className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 flex flex-col sm:flex-row gap-4"
                 >
                   <Link
@@ -71,7 +72,7 @@ export default function CartPage() {
                     className="w-full sm:w-28 h-28 rounded-xl overflow-hidden bg-gradient-to-br from-[#eef1f3] via-[#dfe3e6] to-[#c4c9ce] shrink-0"
                   >
                     <img
-                      src={item.image}
+                      src={assetUrl(item.image)}
                       alt={item.name}
                       className="w-full h-full object-cover"
                       onError={(event) => {
@@ -97,9 +98,12 @@ export default function CartPage() {
                             .filter(Boolean)
                             .join(' · ') || 'Spesifikasi lengkap'}
                         </p>
+                        {item.varian && (
+                          <p className="text-cyan-300/80 text-xs mt-1">Varian: {item.varian}</p>
+                        )}
                       </div>
                       <button
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => removeItem(item.cartKey)}
                         className="text-white/30 hover:text-red-300 text-xs transition-colors"
                       >
                         Hapus
@@ -109,7 +113,7 @@ export default function CartPage() {
                     <div className="flex flex-wrap items-center justify-between gap-3 mt-4">
                       <div className="flex items-center gap-2">
                         <button
-                          onClick={() => updateQty(item.id, item.qty - 1)}
+                          onClick={() => updateQty(item.cartKey, item.qty - 1)}
                           className="w-8 h-8 rounded-lg border border-white/10 bg-white/5 text-white hover:bg-white/10"
                           aria-label="Kurangi jumlah"
                         >
@@ -119,7 +123,7 @@ export default function CartPage() {
                           {item.qty}
                         </span>
                         <button
-                          onClick={() => updateQty(item.id, item.qty + 1)}
+                          onClick={() => updateQty(item.cartKey, item.qty + 1)}
                           className="w-8 h-8 rounded-lg border border-white/10 bg-white/5 text-white hover:bg-white/10"
                           aria-label="Tambah jumlah"
                         >
