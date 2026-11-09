@@ -145,6 +145,7 @@ server/
 
 ## Catatan
 
+<<<<<<< HEAD
 - Harga di katalog mengikuti harga pasar terkini. Harga final, stok, dan ongkir
   dikonfirmasi melalui WhatsApp.
 - Nomor WhatsApp checkout: **+62 877-7774-7462** (`6287777747462`).
@@ -160,3 +161,20 @@ server/
   Hubungkan ke layanan email sebelum mengandalkan alur ini di production.
 - Data utama disimpan di MySQL (bukan JSON). `data.json` hanya dipakai sebagai
   sumber seed saat migrasi.
+=======
+- Harga di katalog adalah harga contoh. Harga final, stok, dan ongkir dikonfirmasi
+  melalui WhatsApp.
+- Nomor WhatsApp checkout: **+62 xxxxxxx** (`628xxxxx`).
+- Akun admin dikelola di `server/src/db/data.json`; halaman register publik hanya
+  membuat akun customer. Kredensial admin tidak ditampilkan di UI. Gunakan
+  password yang kuat dan jangan commit kredensial ke repository publik.
+- Isi `JWT_SECRET` di `server/.env` (lihat `server/.env.example`) sebelum deploy.
+  `ADMIN_PASSWORD` hanya dipakai saat membuat password admin awal dari placeholder.
+- Skrip verifikasi UI membaca kredensial dari environment, bukan hardcoded:
+  `$env:ADMIN_EMAIL="..."; $env:ADMIN_PASSWORD="..."; node scripts/verify-admin.mjs`.
+- Akun baru dari halaman register berperan **customer**. Akun lama di
+  `data.json` dipertahankan sebagai admin.
+- Endpoint mutasi (`POST/PUT/PATCH/DELETE` produk, kategori, pengaturan toko)
+  membutuhkan token dengan role `admin`.
+- Data pengguna dan produk disimpan di `server/src/db/data.json` (bukan SQLite).
+>>>>>>> origin/main
